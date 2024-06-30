@@ -1,0 +1,44 @@
+import Player
+import pygame
+print("hello world")
+
+
+player_model = Player.Player.player_img
+pygame.init()
+screen = pygame.display.set_mode((1280, 720))
+clock = pygame.time.Clock()
+running = True
+
+
+
+
+while running:
+    for event in pygame.event.get():
+        screen.blit(player_model(500, 500))
+        if event.type == pygame.QUIT:
+            running = False
+
+    
+
+    
+    pygame.display.update()
+
+    clock.tick(60)
+
+pygame.quit()
+
+
+
+
+
+
+
+/////////////////////Player class below
+import pygame
+
+class Player:
+    player_img = pygame.image.load("Biplane.png")
+    def printer():
+        print("Printer func")
+
+
