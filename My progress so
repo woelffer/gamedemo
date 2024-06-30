@@ -14,7 +14,7 @@ running = True
 
 while running:
     for event in pygame.event.get():
-        screen.blit(player_model(500, 500))
+        screen.blit(player_model.player_img, (500, 500))
         if event.type == pygame.QUIT:
             running = False
 
