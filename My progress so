@@ -3,22 +3,37 @@ import pygame
 print("hello world")
 
 
-player_model = Player.Player.player_img
+player_model = Player.Player
+
 pygame.init()
+
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
 
 
-
-
 while running:
+    screen.fill((0,0,0))
+    screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
     for event in pygame.event.get():
-        screen.blit(player_model(500, 500))
-        if event.type == pygame.QUIT:
-            running = False
 
-    
+        key = pygame.key.get_pressed()
+        
+        if key[pygame.K_a] == True:
+            player_model.movement('a')
+
+        if key[pygame.K_d] == True:
+            player_model.movement('d')
+
+        if key[pygame.K_w] == True:
+            player_model.movement('w')
+
+        if key[pygame.K_s] == True:
+            player_model.movement('s')
+            
+        if event.type == pygame.QUIT:
+            running = false
+        
 
     
     pygame.display.update()
@@ -36,9 +51,25 @@ pygame.quit()
 /////////////////////Player class below
 import pygame
 
-class Player:
+class Player():
     player_img = pygame.image.load("Biplane.png")
+    pos_x, pos_y = 500, 500
+    vel_x, vel_y = 10,10
+
+
     def printer():
         print("Printer func")
 
+    def movement(movement):
+        if movement == 'a':
+            Player.pos_x = Player.pos_x - Player.vel_x
+            
+        if movement == 'd':
+            Player.pos_x = Player.pos_x + Player.vel_x
+          
+        if movement == 'w':
+            Player.pos_y = Player.pos_y - Player.vel_y
+
+        if movement == 's':
+            Player.pos_y = Player.pos_y + Player.vel_y
 
