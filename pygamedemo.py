@@ -1,6 +1,5 @@
 import Player
 import pygame
-print("hello world")
 
 
 player_model = Player.Player()
