@@ -77,8 +77,8 @@ while running:
 
         if key[pygame.K_SPACE]:
             # Calculate the bullet positions relative to the player
-            bullet_offset_1 = (98, 5)
-            bullet_offset_2 = (22, 6)
+            bullet_offset_1 = (54, 6)
+            bullet_offset_2 = (4, 6)
             bullet_position_1 = [player_model.pos_x + bullet_offset_1[0], player_model.pos_y + bullet_offset_1[1]]
             bullet_position_2 = [player_model.pos_x + bullet_offset_2[0], player_model.pos_y + bullet_offset_2[1]]
             # Create new bullets and add them to the list

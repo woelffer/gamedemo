@@ -4,7 +4,7 @@ import pygame
 
 class Player:
     def __init__(self):
-        self.player_img = pygame.image.load("Biplane.png")
+        self.player_img = pygame.image.load("Spaceship.png")
         self.pos_x, self.pos_y = 500, 500
         self.vel_x, self.vel_y = 600,600
 
