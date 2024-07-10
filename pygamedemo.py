@@ -60,9 +60,7 @@ while running:
     screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
 
     #Draw Player lives. ***** Need to fix this later ******
-    screen.blit(lives_model.lives_img, (0, 670))
-    screen.blit(lives_model.lives_img, (50, 670))
-    screen.blit(lives_model.lives_img, (100, 670))
+    lives_model.draw(screen)
 
 
     #Update and draw bullets
@@ -92,6 +90,9 @@ while running:
 
 
     if key[pygame.K_SPACE] and time_since_last_shot >= BULLET_COOLDOWN:
+            
+ 
+
             # Reset the cooldown timer
             time_since_last_shot = 0
 
