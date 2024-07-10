@@ -2,11 +2,17 @@ import Player
 import Bullet
 import pygame
 import Star
+import Enemy
+import Lives
 import random
 
 
 #Initialize Player 
 player_model = Player.Player()
+enemy_model = Enemy.Enemy()
+lives_model = Lives.Lives()
+
+#Bullet initialize
 bullet_speed = -500
 bullets = []
 
@@ -38,9 +44,18 @@ while running:
         star.move(dt)
         star.draw(screen)
 
-    #Draw Player
+    #Draw Players
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
-    
+
+
+    screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
+
+    #Draw Player lives. ***** Need to fix this later ******
+    screen.blit(lives_model.lives_img, (0, 670))
+    screen.blit(lives_model.lives_img, (50, 670))
+    screen.blit(lives_model.lives_img, (100, 670))
+
+
     #Update and draw bullets
     for bullet in bullets:
         bullet.move(dt)
