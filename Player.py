@@ -7,7 +7,7 @@ class Player:
     def __init__(self):
         self.player_img = pygame.image.load("assets/Spaceship.png")
         self.pos_x, self.pos_y = 500, 500
-        self.vel_x, self.vel_y = 600,600
+        self.vel_x, self.vel_y = 200, 200
 
 
     def printer():

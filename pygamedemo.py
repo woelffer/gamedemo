@@ -3,7 +3,7 @@ import Bullet
 import pygame
 import Star
 import random
-import assets 
+
 
 #Initialize Player 
 player_model = Player.Player()
@@ -22,12 +22,13 @@ running = True
 # Initialize stars
 star_img = pygame.image.load("assets/Star.png")  # Load the star image
 
-num_stars = 35
+num_stars = 20
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
 while running:
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
+
 
     #Clear Screen
     screen.fill((0,0,0))
@@ -49,34 +50,34 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-        key = pygame.key.get_pressed()
-        moved = False
+    key = pygame.key.get_pressed()
+    moved = False
 
-        if key[pygame.K_a]:
+    if key[pygame.K_a]:
             player_model.movement('a', dt)
             for star in stars:
                 star.move_horizontal(player_model.vel_x * dt)
             moved = True
-        if key[pygame.K_d]:
+    if key[pygame.K_d]:
             player_model.movement('d', dt)
             for star in stars:
                 star.move_horizontal(-player_model.vel_x * dt)
             moved = True
-        if key[pygame.K_w]:
+    if key[pygame.K_w]:
             player_model.movement('w', dt)
             # Move stars down as the plane moves up
             for star in stars:
                 star.move_vertical(player_model.vel_y * dt)
             moved = True
 
-        if key[pygame.K_s]:
+    if key[pygame.K_s]:
             player_model.movement('s', dt)
             # Move stars up as the plane moves down
             for star in stars:
                 star.move_vertical(-player_model.vel_y * dt)
             moved = True
 
-        if key[pygame.K_SPACE]:
+    if key[pygame.K_SPACE]:
             # Calculate the bullet positions relative to the player
             bullet_offset_1 = (54, 6)
             bullet_offset_2 = (4, 6)
@@ -90,13 +91,13 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
 
-        for star in stars:
-            star.draw(screen)    
+    for star in stars:
+        star.draw(screen)    
 
-        bullets = [bullet for bullet in bullets if bullet.pos_y >0]
+    bullets = [bullet for bullet in bullets if bullet.pos_y >0]
     
     pygame.display.flip()
-
-    clock.tick(120)
+    
+    clock.tick(0)
 
 pygame.quit()

@@ -11,7 +11,7 @@ class Star:
     def reset(self):
         self.pos_x = random.randint(0, self.screen_width)
         self.pos_y = random.randint(0, self.screen_height)
-        self.speed = random.uniform(0,-100) #varying speeds for parallax effect 
+        self.speed = random.uniform(0,-10) #varying speeds for parallax effect 
     
     def move(self, dt):
         self.pos_y -= self.speed * dt
