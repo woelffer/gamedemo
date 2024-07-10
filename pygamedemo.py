@@ -17,7 +17,7 @@ bullet_speed = -500
 bullets = []
 
 #Can ADJUST THIS WHEN WE Introduce levels and powerups
-BULLET_COOLDOWN = 0.5
+BULLET_COOLDOWN = 0.05
 
 
 # Track the time since the last bullet was fired
@@ -59,7 +59,7 @@ while running:
 
     screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
 
-    #Draw Player lives. ***** Need to fix this later ******
+    #Draw Player lives
     lives_model.draw(screen)
 
 
