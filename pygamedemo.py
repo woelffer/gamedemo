@@ -16,6 +16,13 @@ lives_model = Lives.Lives()
 bullet_speed = -500
 bullets = []
 
+#Can ADJUST THIS WHEN WE Introduce levels and powerups
+BULLET_COOLDOWN = 0.5
+
+
+# Track the time since the last bullet was fired
+time_since_last_shot = 0
+
 #Screen Dimensions
 screen_width, screen_height = 1280, 720
 
@@ -35,6 +42,7 @@ while running:
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
 
+    time_since_last_shot += dt  # Update the cooldown timer
 
     #Clear Screen
     screen.fill((0,0,0))
@@ -92,7 +100,10 @@ while running:
                 star.move_vertical(-player_model.vel_y * dt)
             moved = True
 
-    if key[pygame.K_SPACE]:
+    if key[pygame.K_SPACE] and time_since_last_shot >= BULLET_COOLDOWN:
+            # Reset the cooldown timer
+            time_since_last_shot = 0
+
             # Calculate the bullet positions relative to the player
             bullet_offset_1 = (54, 6)
             bullet_offset_2 = (4, 6)
