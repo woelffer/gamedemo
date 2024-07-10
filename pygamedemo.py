@@ -25,6 +25,7 @@ time_since_last_shot = 0
 
 #Screen Dimensions
 screen_width, screen_height = 1280, 720
+pygame.display.set_caption("Galaga Clone")
 
 pygame.init()
 
@@ -78,27 +79,17 @@ while running:
 
     if key[pygame.K_a]:
             player_model.movement('a', dt, screen_width, screen_height)
-            for star in stars:
-                star.move_horizontal(player_model.vel_x * dt)
-            moved = True
+
     if key[pygame.K_d]:
             player_model.movement('d', dt, screen_width, screen_height)
-            for star in stars:
-                star.move_horizontal(-player_model.vel_x * dt)
-            moved = True
+
     if key[pygame.K_w]:
             player_model.movement('w', dt, screen_width, screen_height)
-            # Move stars down as the plane moves up
-            for star in stars:
-                star.move_vertical(player_model.vel_y * dt)
-            moved = True
+
 
     if key[pygame.K_s]:
             player_model.movement('s', dt, screen_width, screen_height)
-            # Move stars up as the plane moves down
-            for star in stars:
-                star.move_vertical(-player_model.vel_y * dt)
-            moved = True
+
 
     if key[pygame.K_SPACE] and time_since_last_shot >= BULLET_COOLDOWN:
             # Reset the cooldown timer
@@ -118,8 +109,8 @@ while running:
                 running = False
 
     #Draw stars
-  #  for star in stars:
-  #      star.draw(screen)    
+    for star in stars:
+       star.draw(screen)    
 
     bullets = [bullet for bullet in bullets if bullet.pos_y >0]
     
