@@ -22,7 +22,7 @@ running = True
 # Initialize stars
 star_img = pygame.image.load("assets/Star.png")  # Load the star image
 
-num_stars = 20
+num_stars = 50
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
 while running:
@@ -54,24 +54,24 @@ while running:
     moved = False
 
     if key[pygame.K_a]:
-            player_model.movement('a', dt)
+            player_model.movement('a', dt, screen_width, screen_height)
             for star in stars:
                 star.move_horizontal(player_model.vel_x * dt)
             moved = True
     if key[pygame.K_d]:
-            player_model.movement('d', dt)
+            player_model.movement('d', dt, screen_width, screen_height)
             for star in stars:
                 star.move_horizontal(-player_model.vel_x * dt)
             moved = True
     if key[pygame.K_w]:
-            player_model.movement('w', dt)
+            player_model.movement('w', dt, screen_width, screen_height)
             # Move stars down as the plane moves up
             for star in stars:
                 star.move_vertical(player_model.vel_y * dt)
             moved = True
 
     if key[pygame.K_s]:
-            player_model.movement('s', dt)
+            player_model.movement('s', dt, screen_width, screen_height)
             # Move stars up as the plane moves down
             for star in stars:
                 star.move_vertical(-player_model.vel_y * dt)
@@ -91,8 +91,9 @@ while running:
             if event.type == pygame.QUIT:
                 running = False
 
-    for star in stars:
-        star.draw(screen)    
+    #Draw stars
+  #  for star in stars:
+  #      star.draw(screen)    
 
     bullets = [bullet for bullet in bullets if bullet.pos_y >0]
     
