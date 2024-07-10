@@ -3,6 +3,7 @@ import Bullet
 import pygame
 import Star
 import random
+import assets 
 
 #Initialize Player 
 player_model = Player.Player()
@@ -19,7 +20,7 @@ clock = pygame.time.Clock()
 running = True
 
 # Initialize stars
-star_img = pygame.image.load("Star.png")  # Load the star image
+star_img = pygame.image.load("assets/Star.png")  # Load the star image
 
 num_stars = 35
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
