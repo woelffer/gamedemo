@@ -8,3 +8,6 @@ class Bullet:
     
     def move(self, dt):
         self.pos_y += self.speed * dt
+    
+    def rect(self):
+        return self.bullet_img.get_rect(topleft =(self.pos_x, self.pos_y))

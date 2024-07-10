@@ -9,7 +9,7 @@ import random
 
 #Initialize Player 
 player_model = Player.Player()
-enemy_model = Enemy.Enemy()
+enemies = [Enemy.Enemy(0, 0), Enemy.Enemy(400, 0), Enemy.Enemy(600, 0)]  # List of enemies
 lives_model = Lives.Lives()
 
 #Bullet initialize
@@ -56,7 +56,7 @@ while running:
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
 
 
-    screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
+    #screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
 
     #Draw Player lives
     lives_model.draw(screen)
@@ -110,14 +110,39 @@ while running:
 
     #Draw stars
     for star in stars:
-       star.draw(screen)    
+       star.draw(screen) 
 
-    #Move Enemy
-    enemy_model.move_towards_player(player_model, dt)
+    # Move bullets
+    for bullet in bullets:
+        bullet.move(dt)
+
+    # Check for bullet collisions with enemies
+    for bullet in bullets:
+        for enemy in enemies:
+            if bullet.rect().colliderect(enemy.rect()):
+                enemy.take_dmg()
+                bullets.remove(bullet)  # Remove bullet after collision
+                if not enemy.is_alive():
+                    enemies.remove(enemy)  # Remove enemy if health is zero
+                break  # Exit the inner loop to avoid modifying the list during iteration           
+
+    # Move and update enemies
+    for enemy in enemies:
+        enemy.move_towards_player(player_model, dt)
+        enemy.update()
+
+    # Draw game objects
+    for enemy in enemies:
+        enemy.draw(screen)
+
+    screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
+    
+    lives_model.draw(screen)
+    
+    for bullet in bullets:
+        screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))             
 
 
-
-    bullets = [bullet for bullet in bullets if bullet.pos_y >0]
     
     pygame.display.flip()
     
