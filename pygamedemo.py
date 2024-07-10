@@ -35,7 +35,6 @@ running = True
 
 # Initialize stars
 star_img = pygame.image.load("assets/Star.png")  # Load the star image
-
 num_stars = 50
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
@@ -112,6 +111,11 @@ while running:
     #Draw stars
     for star in stars:
        star.draw(screen)    
+
+    #Move Enemy
+    enemy_model.move_towards_player(player_model, dt)
+
+
 
     bullets = [bullet for bullet in bullets if bullet.pos_y >0]
     
