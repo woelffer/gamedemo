@@ -5,6 +5,7 @@ import Star
 import Enemy
 import Lives
 import random
+from pygame import mixer
 
 
 #Initialize Player 
@@ -28,6 +29,9 @@ screen_width, screen_height = 1280, 720
 pygame.display.set_caption("Galaga Clone")
 
 pygame.init()
+
+#Starting the mixer
+mixer.init()
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
@@ -103,6 +107,8 @@ while running:
             # Create new bullets and add them to the list
             new_bullet_1 = Bullet.Bullet(bullet_position_1, bullet_speed)
             new_bullet_2 = Bullet.Bullet(bullet_position_2, bullet_speed)
+            new_bullet_1.play_sound()
+            new_bullet_2.play_sound()
             bullets.append(new_bullet_1)
             bullets.append(new_bullet_2)
             if event.type == pygame.QUIT:
