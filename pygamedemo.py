@@ -13,6 +13,22 @@ pygame.init()
 #Starting the mixer
 mixer.init()
 
+# Colors
+white = (255, 255, 255)
+black = (0, 0, 0)
+score = 0
+
+font = pygame.font.Font('freesansbold.ttf', 32)
+
+def update_score_text():
+    return font.render('SCORE: ' + str(score), True, white, black)
+
+text = update_score_text()
+textRect = text.get_rect()
+
+
+
+
 #Initialize Player 
 player_model = Player.Player()
 enemies = [Enemy.Enemy(0, 0), Enemy.Enemy(400, 0), Enemy.Enemy(600, 0)]  # List of enemies
@@ -145,6 +161,8 @@ while running:
         enemy.play_sound()
         enemy.sound_played = True #Set flag to indicat the sound has been playedS
         enemies.remove(enemy)
+        score += 200
+        text = update_score_text()
     for bullet in bullets_to_remove:
         bullets.remove(bullet)
 
@@ -164,7 +182,8 @@ while running:
         screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))             
 
 
-    
+    screen.blit(text, textRect)
+
     pygame.display.flip()
     
     clock.tick(0)
