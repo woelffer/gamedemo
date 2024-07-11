@@ -7,6 +7,11 @@ import Lives
 import random
 from pygame import mixer
 
+#Initialize pygame
+pygame.init()
+
+#Starting the mixer
+mixer.init()
 
 #Initialize Player 
 player_model = Player.Player()
@@ -28,10 +33,7 @@ time_since_last_shot = 0
 screen_width, screen_height = 1280, 720
 pygame.display.set_caption("Galaga Clone")
 
-pygame.init()
 
-#Starting the mixer
-mixer.init()
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
@@ -122,24 +124,37 @@ while running:
     for bullet in bullets:
         bullet.move(dt)
 
+    # List to keep track of enemies to be removed
+    enemies_to_remove = set()
+    bullets_to_remove = set()
+    
     # Check for bullet collisions with enemies
     for bullet in bullets:
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
                 enemy.take_dmg()
-                bullets.remove(bullet)  # Remove bullet after collision
+                bullets_to_remove.add(bullet)  # Remove bullet after collision
                 if not enemy.is_alive():
-                    enemies.remove(enemy)  # Remove enemy if health is zero
+
+                    enemies_to_remove.add(enemy)  # Remove enemy if health is zero
+                    
                 break  # Exit the inner loop to avoid modifying the list during iteration           
+   
+    # Remove marked enemies and bullets
+    for enemy in enemies_to_remove:
+        enemy.play_sound()
+        enemy.sound_played = True #Set flag to indicat the sound has been playedS
+        enemies.remove(enemy)
+    for bullet in bullets_to_remove:
+        bullets.remove(bullet)
+
 
     # Move and update enemies
     for enemy in enemies:
         enemy.move_towards_player(player_model, dt)
         enemy.update()
-
-    # Draw game objects
-    for enemy in enemies:
         enemy.draw(screen)
+          
 
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
     

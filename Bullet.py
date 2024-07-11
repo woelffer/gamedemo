@@ -16,4 +16,5 @@ class Bullet:
         return self.bullet_img.get_rect(topleft =(self.pos_x, self.pos_y))
     
     def play_sound(self):
-        self.bullet_sound.play()
+        channel = pygame.mixer.Channel(2)
+        channel.play(self.bullet_sound)

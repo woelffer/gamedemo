@@ -1,5 +1,6 @@
 import pygame 
 import math 
+from pygame import mixer
 
 class Enemy:
     def __init__(self, posx, posy):
@@ -11,6 +12,10 @@ class Enemy:
         self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
         self.damaged = False
         self.damaged_time = 0 # Time when the enemy was last damaged
+        self.death_sound = mixer.Sound("audio/retro-explosion-2.wav")
+        self.death_sound.set_volume(0.6)
+        self.sound_played = False #Flag to track if the sound has been played
+ 
 
     def move_towards_player(self, player, dt):
         #Find direction vector (dx, dy) between enemy and player
@@ -55,5 +60,12 @@ class Enemy:
     def is_alive(self):
         return self.health > 0
     
+    def play_sound(self):
+        channel = mixer.Channel(1)
+        if channel: 
+            channel.play(self.death_sound)
+        else:
+            print("No Available Channels to play")
+
     def rect(self):
         return self.enemy_img.get_rect(topleft = (self.pos_x, self.pos_y))
