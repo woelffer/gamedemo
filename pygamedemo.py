@@ -156,6 +156,15 @@ while running:
                     
                 break  # Exit the inner loop to avoid modifying the list during iteration           
    
+
+    # Check for collisions between player and enemies
+    for enemy in enemies:
+        if player_model.rect().colliderect(enemy.rect()):
+            player_model.take_dmg()
+            enemies_to_remove.add(enemy)
+            lives_model.remove_life()
+            break
+
     # Remove marked enemies and bullets
     for enemy in enemies_to_remove:
         enemy.play_sound()

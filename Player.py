@@ -8,6 +8,7 @@ class Player:
         self.player_img = pygame.image.load("assets/Spaceship.png")
         self.pos_x, self.pos_y = 600, 600
         self.vel_x, self.vel_y = 400, 400
+        self.lives = 3
 
 
     def movement(self, movement, dt, screen_width, screen_height):
@@ -38,3 +39,12 @@ class Player:
         if keys[pygame.K_s]:
             self.movement('s', dt, screen_width, screen_height)
 
+    def rect(self):
+        return self.player_img.get_rect(topleft=(self.pos_x, self.pos_y))
+    
+    def take_dmg(self):
+        self.lives -= 1
+        if self.lives <= 0:
+            pygame.quit()
+        #handle player death ******
+            pass
