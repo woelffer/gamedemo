@@ -26,9 +26,6 @@ def update_score_text():
 text = update_score_text()
 textRect = text.get_rect()
 
-
-
-
 #Initialize Player 
 player_model = Player.Player()
 enemies = [Enemy.Enemy(0, 0), Enemy.Enemy(400, 0), Enemy.Enemy(600, 0)]  # List of enemies
@@ -60,11 +57,22 @@ star_img = pygame.image.load("assets/Star.png")  # Load the star image
 num_stars = 50
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
+#Variables for spawning enemies
+SPAWN_INTERVAL = 1.0 #Seconds between spawns
+time_since_last_spawn = 0
+
+def spawn_enemy():
+     x_pos = random.randint(0, screen_width - 64) #Enemy width 64 pixels 
+     y_pos = -64 #start offscreen
+     new_enemy = Enemy.Enemy(x_pos, y_pos)
+     enemies.append(new_enemy)
+
 while running:
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
 
     time_since_last_shot += dt  # Update the cooldown timer
+    time_since_last_spawn += dt #Update spawn timer
 
     #Clear Screen
     screen.fill((0,0,0))
@@ -111,26 +119,29 @@ while running:
 
 
     if key[pygame.K_SPACE] and time_since_last_shot >= BULLET_COOLDOWN:
-            
- 
 
-            # Reset the cooldown timer
-            time_since_last_shot = 0
+        # Reset the cooldown timer
+        time_since_last_shot = 0
 
-            # Calculate the bullet positions relative to the player
-            bullet_offset_1 = (54, 6)
-            bullet_offset_2 = (4, 6)
-            bullet_position_1 = [player_model.pos_x + bullet_offset_1[0], player_model.pos_y + bullet_offset_1[1]]
-            bullet_position_2 = [player_model.pos_x + bullet_offset_2[0], player_model.pos_y + bullet_offset_2[1]]
-            # Create new bullets and add them to the list
-            new_bullet_1 = Bullet.Bullet(bullet_position_1, bullet_speed)
-            new_bullet_2 = Bullet.Bullet(bullet_position_2, bullet_speed)
-            new_bullet_1.play_sound()
-            new_bullet_2.play_sound()
-            bullets.append(new_bullet_1)
-            bullets.append(new_bullet_2)
-            if event.type == pygame.QUIT:
-                running = False
+        # Calculate the bullet positions relative to the player
+        bullet_offset_1 = (54, 6)
+        bullet_offset_2 = (4, 6)
+        bullet_position_1 = [player_model.pos_x + bullet_offset_1[0], player_model.pos_y + bullet_offset_1[1]]
+        bullet_position_2 = [player_model.pos_x + bullet_offset_2[0], player_model.pos_y + bullet_offset_2[1]]
+        # Create new bullets and add them to the list
+        new_bullet_1 = Bullet.Bullet(bullet_position_1, bullet_speed)
+        new_bullet_2 = Bullet.Bullet(bullet_position_2, bullet_speed)
+        new_bullet_1.play_sound()
+        new_bullet_2.play_sound()
+        bullets.append(new_bullet_1)
+        bullets.append(new_bullet_2)
+        if event.type == pygame.QUIT:
+            running = False
+
+    #Spawn new enemies at intervals 
+    if time_since_last_spawn >= SPAWN_INTERVAL:
+         spawn_enemy()
+         time_since_last_spawn = 0
 
     #Draw stars
     for star in stars:
