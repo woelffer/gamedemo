@@ -5,6 +5,7 @@ import Star
 import Enemy
 import Lives
 import random
+import math
 from pygame import mixer
 
 #Initialize pygame
@@ -16,6 +17,31 @@ theme = mixer.Sound('audio/retro_song.mp3')
 channel = mixer.Channel(3)
 channel.play(theme)
 
+#Load ability icon 
+circle_ability_icon = pygame.image.load("assets/circle.png")
+circle_ability_icon = pygame.transform.scale(circle_ability_icon, (64, 64))
+
+#Load font for text 
+ability_font = pygame.font.Font('freesansbold.ttf', 24)
+
+def draw_abilities(screen):
+    screen_width, screen_height = screen.get_size()
+    padding = 10
+    icon_size = 64
+    
+    # Calculate positions
+    circle_icon_pos = (screen_width - icon_size - padding, screen_height - icon_size - padding)
+
+    # Draw ability icons
+    screen.blit(circle_ability_icon, circle_icon_pos) 
+
+    #Draw test next to ability
+    text_surface = ability_font.render("Press 'E'", True, (255, 255, 255))
+    text_rect = text_surface.get_rect()
+    text_rect.right = circle_icon_pos[0] - padding
+    text_rect.centery = circle_icon_pos[1] + icon_size // 2
+    screen.blit(text_surface, text_rect)   
+ 
 # Colors
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -79,6 +105,11 @@ while running:
 
     #Clear Screen
     screen.fill((0,0,0))
+    draw_abilities(screen)
+
+    #Update and draw the player's circle
+    player_model.update_circle(dt)
+    player_model.draw_circle(screen)
 
     # Update and draw stars
     for star in stars:
@@ -167,6 +198,17 @@ while running:
             enemies_to_remove.add(enemy)
             lives_model.remove_life()
             break
+    
+    #Check for circle collisions with enemies
+    if player_model.circle_active:
+        circle_center = (player_model.pos_x + player_model.player_img.get_width() // 2, player_model.pos_y + player_model.player_img.get_height() // 2)
+        for enemy in enemies:
+            enemy_center = (enemy.pos_x + enemy.enemy_img.get_width() // 2, enemy.pos_y + enemy.enemy_img.get_height() // 2)
+            distance = math.sqrt((circle_center[0] - enemy_center[0]) ** 2 + (circle_center[1] - enemy_center[1]) ** 2)
+            if distance < player_model.circle_radius + enemy.enemy_img.get_width() // 2: #Assume enemy is a cirle for simplicity
+                enemy.health = 0
+                if not enemy.is_alive():
+                    enemies_to_remove.add(enemy)
 
     # Remove marked enemies and bullets
     for enemy in enemies_to_remove:
@@ -198,6 +240,6 @@ while running:
 
     pygame.display.flip()
     
-    clock.tick(0)
+    clock.tick(60)
 
 pygame.quit()

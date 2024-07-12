@@ -7,7 +7,7 @@ class Enemy:
         self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png")
         self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
         self.pos_x, self.pos_y = posx, posy
-        self.speed = 350
+        self.speed = 200
         self.health = 5
         self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
         self.damaged = False
