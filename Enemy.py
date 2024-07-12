@@ -7,7 +7,7 @@ class Enemy:
         self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png")
         self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
         self.pos_x, self.pos_y = posx, posy
-        self.speed = 100
+        self.speed = 350
         self.health = 5
         self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
         self.damaged = False
@@ -61,11 +61,14 @@ class Enemy:
         return self.health > 0
     
     def play_sound(self):
-        channel = mixer.Channel(1)
-        if channel: 
-            channel.play(self.death_sound)
-        else:
-            print("No Available Channels to play")
+        try:
+            channel = mixer.Channel(1)
+            if channel: 
+                channel.play(self.death_sound)
+            else:
+                print("No Available Channels to play")
+        except pygame.error as e:
+            print(f"Pygame error occurred: {e}")
 
     def rect(self):
         return self.enemy_img.get_rect(topleft = (self.pos_x, self.pos_y))
