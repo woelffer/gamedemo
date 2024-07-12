@@ -8,7 +8,7 @@ class Enemy:
         self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
         self.pos_x, self.pos_y = posx, posy
         self.speed = 100
-        self.health = 20
+        self.health = 5
         self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
         self.damaged = False
         self.damaged_time = 0 # Time when the enemy was last damaged
