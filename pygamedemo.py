@@ -96,6 +96,31 @@ def spawn_enemy():
      new_enemy = Enemy.Enemy(x_pos, y_pos)
      enemies.append(new_enemy)
 
+
+# Function to draw abilities in the bottom right corner
+def draw_abilities(screen, player):
+    screen_width, screen_height = screen.get_size()
+    padding = 10  # Padding from the edges
+    icon_size = 64  # Size of the ability icon
+
+    # Calculate positions
+    circle_icon_pos = (screen_width - icon_size - padding, screen_height - icon_size - padding)
+
+    # Draw ability icon
+    screen.blit(circle_ability_icon, circle_icon_pos)
+
+    # Draw text next to the ability icon
+    current_time = pygame.time.get_ticks() / 1000  # Convert to seconds
+    cooldown_remaining = max(0, player.ability_cooldown - (current_time - player.last_ability_use_time))
+    if cooldown_remaining > 0:
+        text_surface = ability_font.render(f"Cooldown: {cooldown_remaining:.1f}s", True, (255, 255, 255))
+    else:
+        text_surface = ability_font.render("Press 'E'", True, (255, 255, 255))
+    text_rect = text_surface.get_rect()
+    text_rect.right = circle_icon_pos[0] - padding
+    text_rect.centery = circle_icon_pos[1] + icon_size // 2
+    screen.blit(text_surface, text_rect)
+
 while running:
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
@@ -105,7 +130,7 @@ while running:
 
     #Clear Screen
     screen.fill((0,0,0))
-    draw_abilities(screen)
+    #aaaaaaaaadraw_abilities(screen)
 
     #Update and draw the player's circle
     player_model.update_circle(dt)
@@ -178,6 +203,9 @@ while running:
     enemies_to_remove = set()
     bullets_to_remove = set()
     
+    #Draw abilities in the bottom right corner
+    draw_abilities(screen, player_model)
+
     # Check for bullet collisions with enemies
     for bullet in bullets:
         for enemy in enemies:

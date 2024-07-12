@@ -13,6 +13,8 @@ class Player:
         self.circle_max_radius = 64*2   #twice the size of player sprite
         self.circle_growth_rate = 400 #pixels per second
         self.circle_active = False
+        self.ability_cooldown = 5 # Cooldown in seconds
+        self.last_ability_use_time = -self.ability_cooldown #initialization allows ability to be used on startup
 
 
     def movement(self, movement, dt, screen_width, screen_height):
@@ -34,6 +36,8 @@ class Player:
 
     def handle_keys(self, dt, screen_width, screen_height):
         keys = pygame.key.get_pressed()
+        current_time = pygame.time.get_ticks() / 1000 
+
         if keys[pygame.K_a]:
             self.movement('a', dt, screen_width, screen_height)
         if keys[pygame.K_d]:
@@ -45,6 +49,7 @@ class Player:
         if keys[pygame.K_e]:
             self.circle_active = True
             self.circle_radius = 0
+            self.last_ability_use_time = current_time
 
     def rect(self):
         return self.player_img.get_rect(topleft=(self.pos_x, self.pos_y))
@@ -53,7 +58,7 @@ class Player:
         self.lives -= 1
         if self.lives <= 0:
             pygame.quit()
-        #handle player death ******
+        #handle player death ******NEED TO CHANGE HOW THIS OPERATES 
     
     def update_circle(self, dt):
         if self.circle_active:
@@ -79,4 +84,7 @@ class Player:
             screen.blit(circle_surface, (center[0] - outer_radius, center[1] - outer_radius))
 
             pygame.draw.circle(screen, (0, 128, 255), center, outer_radius, 2)  # Blue outer circle
+
+  
+
             
