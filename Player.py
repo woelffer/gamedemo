@@ -47,4 +47,4 @@ class Player:
         if self.lives <= 0:
             pygame.quit()
         #handle player death ******
-            pass
+            

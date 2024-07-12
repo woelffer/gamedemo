@@ -61,7 +61,7 @@ num_stars = 50
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
 #Variables for spawning enemies
-SPAWN_INTERVAL = 1.0 #Seconds between spawns
+SPAWN_INTERVAL = 0.3 #Seconds between spawns
 time_since_last_spawn = 0
 
 def spawn_enemy():
