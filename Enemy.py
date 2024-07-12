@@ -7,7 +7,8 @@ class Enemy:
         self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png")
         self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
         self.pos_x, self.pos_y = posx, posy
-        self.speed = 200
+        self.base_speed = 200
+        self.speed = self.base_speed
         self.health = 5
         self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
         self.damaged = False
@@ -72,3 +73,6 @@ class Enemy:
 
     def rect(self):
         return self.enemy_img.get_rect(topleft = (self.pos_x, self.pos_y))
+    
+    def increase_speed(self, factor):
+        self.speed = self.base_speed * factor

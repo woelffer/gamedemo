@@ -121,6 +121,7 @@ def draw_abilities(screen, player):
     text_rect.centery = circle_icon_pos[1] + icon_size // 2
     screen.blit(text_surface, text_rect)
 
+
 while running:
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
@@ -130,7 +131,7 @@ while running:
 
     #Clear Screen
     screen.fill((0,0,0))
-    #aaaaaaaaadraw_abilities(screen)
+    #draw_abilities(screen)
 
     #Update and draw the player's circle
     player_model.update_circle(dt)
@@ -205,6 +206,11 @@ while running:
     
     #Draw abilities in the bottom right corner
     draw_abilities(screen, player_model)
+
+   
+    speed_factor = 1 + (score // 5000) * 0.5  # Increase speed by 50% for every 5000 points
+    for enemy in enemies:
+        enemy.increase_speed(speed_factor)
 
     # Check for bullet collisions with enemies
     for bullet in bullets:
