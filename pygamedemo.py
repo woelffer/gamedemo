@@ -12,6 +12,9 @@ pygame.init()
 
 #Starting the mixer
 mixer.init()
+theme = mixer.Sound('audio/retro_song.mp3')
+channel = mixer.Channel(3)
+channel.play(theme)
 
 # Colors
 white = (255, 255, 255)
