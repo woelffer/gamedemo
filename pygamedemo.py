@@ -104,18 +104,7 @@ while running:
     key = pygame.key.get_pressed()
     moved = False
 
-    if key[pygame.K_a]:
-            player_model.movement('a', dt, screen_width, screen_height)
-
-    if key[pygame.K_d]:
-            player_model.movement('d', dt, screen_width, screen_height)
-
-    if key[pygame.K_w]:
-            player_model.movement('w', dt, screen_width, screen_height)
-
-
-    if key[pygame.K_s]:
-            player_model.movement('s', dt, screen_width, screen_height)
+    player_model.handle_keys(dt, screen_width, screen_height)
 
 
     if key[pygame.K_SPACE] and time_since_last_shot >= BULLET_COOLDOWN:

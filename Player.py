@@ -27,3 +27,14 @@ class Player:
         self.pos_x = max(0, min(screen_width - self.player_img.get_width(), self.pos_x))
         self.pos_y = max(0, min(screen_height - self.player_img.get_height(), self.pos_y))
 
+    def handle_keys(self, dt, screen_width, screen_height):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.movement('a', dt, screen_width, screen_height)
+        if keys[pygame.K_d]:
+            self.movement('d', dt, screen_width, screen_height)
+        if keys[pygame.K_w]:
+            self.movement('w', dt, screen_width, screen_height)
+        if keys[pygame.K_s]:
+            self.movement('s', dt, screen_width, screen_height)
+
