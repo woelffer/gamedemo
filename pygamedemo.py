@@ -15,7 +15,7 @@ pygame.init()
 mixer.init()
 theme = mixer.Sound('audio/retro_song.mp3')
 channel = mixer.Channel(3)
-channel.play(theme)
+channel.play(theme, loops=-1) #Loop the music indefinitely
 
 #Load ability icon 
 circle_ability_icon = pygame.image.load("assets/circle.png")
