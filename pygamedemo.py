@@ -28,24 +28,6 @@ circle_ability_icon = pygame.transform.scale(circle_ability_icon, (64, 64))
 #Load font for text 
 ability_font = pygame.font.Font('freesansbold.ttf', 24)
 
-def draw_abilities(screen):
-    screen_width, screen_height = screen.get_size()
-    padding = 10
-    icon_size = 64
-    
-    # Calculate positions
-    circle_icon_pos = (screen_width - icon_size - padding, screen_height - icon_size - padding)
-
-    # Draw ability icons
-    screen.blit(circle_ability_icon, circle_icon_pos) 
-
-    #Draw test next to ability
-    text_surface = ability_font.render("Press 'E'", True, (255, 255, 255))
-    text_rect = text_surface.get_rect()
-    text_rect.right = circle_icon_pos[0] - padding
-    text_rect.centery = circle_icon_pos[1] + icon_size // 2
-    screen.blit(text_surface, text_rect)   
- 
 # Colors
 white = (255, 255, 255)
 black = (0, 0, 0)
