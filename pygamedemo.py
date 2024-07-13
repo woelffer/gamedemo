@@ -4,6 +4,7 @@ import pygame
 import Star
 import Enemy
 import Lives
+import HUD
 import random
 import math
 from pygame import mixer
@@ -20,44 +21,11 @@ channel.set_volume(0.1)
 
 #LOad title screen image
 title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
-
-#Load ability icon 
-circle_ability_icon = pygame.image.load("assets/circle.png")
-circle_ability_icon = pygame.transform.scale(circle_ability_icon, (64, 64))
-
-#Load font for text 
-ability_font = pygame.font.Font('freesansbold.ttf', 24)
-
-def draw_abilities(screen):
-    screen_width, screen_height = screen.get_size()
-    padding = 10
-    icon_size = 64
-    
-    # Calculate positions
-    circle_icon_pos = (screen_width - icon_size - padding, screen_height - icon_size - padding)
-
-    # Draw ability icons
-    screen.blit(circle_ability_icon, circle_icon_pos) 
-
-    #Draw test next to ability
-    text_surface = ability_font.render("Press 'E'", True, (255, 255, 255))
-    text_rect = text_surface.get_rect()
-    text_rect.right = circle_icon_pos[0] - padding
-    text_rect.centery = circle_icon_pos[1] + icon_size // 2
-    screen.blit(text_surface, text_rect)   
  
-# Colors
-white = (255, 255, 255)
-black = (0, 0, 0)
-score = 0
 
-font = pygame.font.Font('freesansbold.ttf', 32)
+#Initialize HUD
+HUD_model = HUD.HUD()
 
-def update_score_text():
-    return font.render('SCORE: ' + str(score), True, white, black)
-
-text = update_score_text()
-textRect = text.get_rect()
 
 #Initialize Player 
 player_model = Player.Player()
@@ -102,7 +70,7 @@ def spawn_enemy():
 
 # Load font for the title screen prompt
 prompt_font = pygame.font.Font('freesansbold.ttf', 28)
-prompt_text = prompt_font.render('Press [Enter] to Start', True, white)
+prompt_text = prompt_font.render('Press [Enter] to Start', True, HUD_model.WHITE)
 prompt_rect = prompt_text.get_rect(center=(screen_width // 2, screen_height // 2 + 100))
 
 #Title Screen Loop
@@ -138,29 +106,6 @@ while title_screen_active:
 
     clock.tick(60)
 
-# Function to draw abilities in the bottom right corner
-def draw_abilities(screen, player):
-    screen_width, screen_height = screen.get_size()
-    padding = 10  # Padding from the edges
-    icon_size = 64  # Size of the ability icon
-
-    # Calculate positions
-    circle_icon_pos = (screen_width - icon_size - padding, screen_height - icon_size - padding)
-
-    # Draw ability icon
-    screen.blit(circle_ability_icon, circle_icon_pos)
-
-    # Draw text next to the ability icon
-    current_time = pygame.time.get_ticks() / 1000  # Convert to seconds
-    cooldown_remaining = max(0, player.ability_cooldown - (current_time - player.last_ability_use_time))
-    if cooldown_remaining > 0:
-        text_surface = ability_font.render(f"Cooldown: {cooldown_remaining:.1f}s", True, (255, 255, 255))
-    else:
-        text_surface = ability_font.render("Press 'E'", True, (255, 255, 255))
-    text_rect = text_surface.get_rect()
-    text_rect.right = circle_icon_pos[0] - padding
-    text_rect.centery = circle_icon_pos[1] + icon_size // 2
-    screen.blit(text_surface, text_rect)
 
 
 while running:
@@ -172,7 +117,7 @@ while running:
 
     #Clear Screen
     screen.fill((0,0,0))
-    #draw_abilities(screen)
+
 
     #Update and draw the player's circle
     player_model.update_circle(dt)
@@ -185,7 +130,8 @@ while running:
 
     #Draw Players
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
-
+    #Draw HUD calls below
+    HUD_model.draw_abilities(screen, player_model)
 
     #screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
 
@@ -245,11 +191,9 @@ while running:
     enemies_to_remove = set()
     bullets_to_remove = set()
     
-    #Draw abilities in the bottom right corner
-    draw_abilities(screen, player_model)
 
    
-    speed_factor = 1 + (score // 5000) * 0.5  # Increase speed by 50% for every 5000 points
+    speed_factor = 1 + (HUD_model.score // 5000) * 0.5  # Increase speed by 50% for every 5000 points
     for enemy in enemies:
         enemy.increase_speed(speed_factor)
 
@@ -290,13 +234,13 @@ while running:
         enemy.play_sound()
         enemy.sound_played = True #Set flag to indicat the sound has been playedS
         enemies.remove(enemy)
-        score += 200
-        text = update_score_text()
+        HUD_model.update_score()
+        
     for bullet in bullets_to_remove:
         bullets.remove(bullet)
 
 
-    # Move and update enemies
+    # Move and update enemies/lives/bullets/score
     for enemy in enemies:
         enemy.move_towards_player(player_model, dt)
         enemy.update()
@@ -310,9 +254,10 @@ while running:
     for bullet in bullets:
         screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))             
 
-
-    screen.blit(text, textRect)
-
+    #draw the score and level name from HUD class
+    screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
+    screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
+    
     pygame.display.flip()
     
     clock.tick(60)
