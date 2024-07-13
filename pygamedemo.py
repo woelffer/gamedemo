@@ -16,6 +16,7 @@ mixer.init()
 theme = mixer.Sound('audio/retro_song.mp3')
 channel = mixer.Channel(3)
 channel.play(theme, loops=-1) #Loop the music indefinitely
+channel.set_volume(0.1)
 
 #LOad title screen image
 title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
