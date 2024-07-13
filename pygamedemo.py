@@ -17,6 +17,9 @@ theme = mixer.Sound('audio/retro_song.mp3')
 channel = mixer.Channel(3)
 channel.play(theme, loops=-1) #Loop the music indefinitely
 
+#LOad title screen image
+title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
+
 #Load ability icon 
 circle_ability_icon = pygame.image.load("assets/circle.png")
 circle_ability_icon = pygame.transform.scale(circle_ability_icon, (64, 64))
@@ -96,6 +99,43 @@ def spawn_enemy():
      new_enemy = Enemy.Enemy(x_pos, y_pos)
      enemies.append(new_enemy)
 
+# Load font for the title screen prompt
+prompt_font = pygame.font.Font('freesansbold.ttf', 28)
+prompt_text = prompt_font.render('Press [Enter] to Start', True, white)
+prompt_rect = prompt_text.get_rect(center=(screen_width // 2, screen_height // 2 + 100))
+
+#Title Screen Loop
+
+title_screen_active = True
+
+while title_screen_active:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RETURN: #Enter to start 
+                title_screen_active = False
+
+    #Clear screen
+    screen.fill((0,0,0))
+
+    #Update and draw stars
+    for star in stars:
+        star.move(1/60.0) #Use a fixed dt for consistent movement
+        star.draw(screen)
+    
+    #Draw Title
+    screen.blit(title_screen_img, (screen_width // 2 - title_screen_img.get_width() // 2,
+                                   screen_height // 2 - title_screen_img.get_height() // 2))
+    
+    #Draw the "Press [Enter] prompt"
+    screen.blit(prompt_text, prompt_rect)
+    
+    #Update display
+    pygame.display.flip()
+
+    clock.tick(60)
 
 # Function to draw abilities in the bottom right corner
 def draw_abilities(screen, player):
