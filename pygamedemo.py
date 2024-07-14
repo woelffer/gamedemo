@@ -9,7 +9,7 @@ import random
 import math
 from pygame import mixer
 
-im breaking the game now..
+
 
 #Initialize pygame
 pygame.init()
