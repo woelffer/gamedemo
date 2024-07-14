@@ -76,3 +76,8 @@ class Enemy:
     
     def increase_speed(self, factor):
         self.speed = self.base_speed * factor
+
+
+
+
+        # RANDOM TEST FOR GIT. DELETE AFTEr
