@@ -23,15 +23,6 @@ channel.set_volume(0.1)
 title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
  
 
-#Load font for text 
-ability_font = pygame.font.Font('freesansbold.ttf', 24)
-
-# Colors
-white = (255, 255, 255)
-black = (0, 0, 0)
-score = 0
-
-font = pygame.font.Font('freesansbold.ttf', 32)
 #Initialize HUD
 HUD_model = HUD.HUD()
 
