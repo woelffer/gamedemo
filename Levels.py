@@ -7,9 +7,7 @@ import pygame
 
 class Levels(object):
     def __init__(self):
-
-    
-    pass
+        pass
 
 
     def TitleScreen():
