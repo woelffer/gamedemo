@@ -39,6 +39,10 @@ title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
 #Initialize HUD
 HUD_model = HUD.HUD()
 
+#Screen Dimensions
+screen_width, screen_height = 1280, 720
+pygame.display.set_caption("Aerials")
+screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
 
 #Initialize Player 
 player_model = Player.Player()
@@ -56,13 +60,7 @@ BULLET_COOLDOWN = 0.05
 # Track the time since the last bullet was fired
 time_since_last_shot = 0
 
-#Screen Dimensions
-screen_width, screen_height = 1280, 720
-pygame.display.set_caption("Aerials")
 
-
-
-screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 running = True
 game_over = False # Flag to track game over state
@@ -253,8 +251,6 @@ while running:
         enemy.draw(screen)
         enemy.draw_collision_rect(screen)
           
-
-    screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
     player_model.update(dt)
     
     lives_model.draw(screen)

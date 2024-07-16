@@ -5,10 +5,10 @@ import pygame
 
 class Player:
     def __init__(self):
-        self.player_img = pygame.image.load("assets/Spaceship.png")
+        self.player_img = pygame.image.load("assets/Spaceship.png").convert_alpha()
         self.original_img = self.player_img.copy() 
         self.pos_x, self.pos_y = 600, 600
-        self.vel_x, self.vel_y = 400, 400
+        self.vel_x, self.vel_y = 600, 600
         self.lives = 3
         self.circle_radius = 0
         self.circle_max_radius = 64*2   #twice the size of player sprite
@@ -26,9 +26,9 @@ class Player:
         self.flash_color = (255, 0, 0)  # Red tint for flash effect
 
     def reset(self):
-        self.player_img = pygame.image.load("assets/Spaceship.png")
+        self.player_img = pygame.image.load("assets/Spaceship.png").convert_alpha()
         self.pos_x, self.pos_y = 600, 600
-        self.vel_x, self.vel_y = 400, 400
+        self.vel_x, self.vel_y = 600, 600
         self.lives = 3
         self.circle_radius = 0
         self.circle_active = False
