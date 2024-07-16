@@ -10,12 +10,16 @@ class Enemy:
         self.base_speed = 200
         self.speed = self.base_speed
         self.health = 5
-        self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
+        #self.enemy_img = pygame.transform.rotate(self.enemy_img, 180)
+        self.dmg_img = pygame.transform.rotate(self.dmg_img, 180)
+        self.original_enemy_img = self.enemy_img #keep copy of the orginal image
+        self.original_dmg_img = self.dmg_img #keep copy of the original dmg image
         self.damaged = False
         self.damaged_time = 0 # Time when the enemy was last damaged
         self.death_sound = mixer.Sound("audio/retro-explosion-2.wav")
         self.death_sound.set_volume(0.6)
         self.sound_played = False #Flag to track if the sound has been played
+        self.angle = 0 #Initial angle
  
 
     def move_towards_player(self, player, dt):
@@ -31,15 +35,21 @@ class Enemy:
             dx /= distance
             dy /= distance
         
+        self.angle = math.degrees(math.atan2(dy, dx)) +90
+        
         #Update the enemy position
         self.pos_x += dx * self.speed * dt
         self.pos_y += dy * self.speed * dt
     
     def draw(self, screen):
+        #Rotate the enmey image based on the angle
+        rotated_enemy_img = pygame.transform.rotate(self.original_enemy_img, -self.angle)
+        rotated_dmg_img = pygame.transform.rotate(self.original_dmg_img, -self.angle)
+        rotated_rect = rotated_enemy_img.get_rect(center=(self.pos_x, self.pos_y))
         if self.damaged:
-            screen.blit(self.dmg_img, (self.pos_x, self.pos_y))
+            screen.blit(rotated_dmg_img, rotated_rect.topleft)
         else:
-            screen.blit(self.enemy_img, (self.pos_x, self.pos_y))
+            screen.blit(rotated_enemy_img, rotated_rect.topleft)
     
     def draw_dmg(self, screen):
     # Temporarily set the damaged flag and draw the damaged image
