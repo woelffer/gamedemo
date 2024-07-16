@@ -17,7 +17,7 @@ class Enemy:
         self.damaged = False
         self.damaged_time = 0 # Time when the enemy was last damaged
         self.death_sound = mixer.Sound("audio/retro-explosion-2.wav")
-        self.death_sound.set_volume(0.6)
+        self.death_sound.set_volume(0.3)
         self.sound_played = False #Flag to track if the sound has been played
         self.angle = 0 #Initial angle
  
