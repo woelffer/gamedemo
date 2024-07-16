@@ -47,13 +47,14 @@ time_since_last_shot = 0
 
 #Screen Dimensions
 screen_width, screen_height = 1280, 720
-pygame.display.set_caption("Galaga Clone")
+pygame.display.set_caption("Aerials")
 
 
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 clock = pygame.time.Clock()
 running = True
+game_over = False # Flag to track game over state
 
 # Initialize stars
 star_img = pygame.image.load("assets/Star.png")  # Load the star image
@@ -249,8 +250,37 @@ while running:
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
     screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
     
+    if player_model.lives <= 0:
+        game_over = True
+
     pygame.display.flip()
     
     clock.tick(60)
+
+    #Game over screen
+
+    while game_over:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                game_over = False #Exit game over screen loop
+
+        #Draw game over screen
+        screen.fill((0,0,0)) #Black Background
+        game_over_font = pygame.font.Font('freesansbold.ttf', 64)
+        game_over_text = game_over_font.render('YOU DIED', True, (255,0,0))
+        game_over_rect = game_over_text.get_rect(center=(screen_width // 2, screen_height // 2))
+        screen.blit(game_over_text, game_over_rect)
+
+         #Update and draw stars
+        for star in stars:
+            star.move(1/60.0) #Use a fixed dt for consistent movement
+            star.draw(screen)
+    
+
+        pygame.display.flip()
+
+        clock.tick(60)
+
 
 pygame.quit()

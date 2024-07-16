@@ -46,7 +46,18 @@ class HUD:
         text_rect.right = circle_icon_pos[0] - padding
         text_rect.centery = circle_icon_pos[1] + icon_size // 2
         screen.blit(text_surface, text_rect)
-
+        
+         # Draw text next to the shift ability icon
+        shift_cooldown_remaining = max(0, player.ability_cooldown - (current_time - player.last_shift_ability_time))
+        if shift_cooldown_remaining > 0:
+            shift_text_surface = self.ability_font.render(f"Shift CD: {shift_cooldown_remaining:.1f}s", True, (255, 255, 255))
+        else:
+            shift_text_surface = self.ability_font.render("Press 'Shift'", True, (255, 255, 255))
+        shift_text_rect = shift_text_surface.get_rect()
+        shift_text_rect.right = circle_icon_pos[0] - padding
+        shift_text_rect.centery = circle_icon_pos[1] + icon_size // 2 + text_rect.height + padding
+        screen.blit(shift_text_surface, shift_text_rect)
+        
     def update_score(self):
         self.score += 200
         

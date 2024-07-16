@@ -15,20 +15,34 @@ class Player:
         self.circle_active = False
         self.ability_cooldown = 5 # Cooldown in seconds
         self.last_ability_use_time = -self.ability_cooldown #initialization allows ability to be used on startup
+        self.shift_ability_cooldown = 5
+        self.last_shift_ability_time = -self.shift_ability_cooldown
+        self.last_move_direction = pygame.math.Vector2(0,0)
+        self.game_over = False #Flag to indicate game state
 
 
     def movement(self, movement, dt, screen_width, screen_height):
+        move_direction = pygame.math.Vector2(0,0)
+
         if movement == 'a':
             self.pos_x -= self.vel_x * dt
+            move_direction.x = -1
             
         if movement == 'd':
             self.pos_x += self.vel_x * dt
+            move_direction.x = 1
           
         if movement == 'w':
             self.pos_y -= self.vel_y * dt
+            move_direction.y = -1
 
         if movement == 's':
             self.pos_y += self.vel_y * dt
+            move_direction.y = 1
+        
+        #Update the last move direction if there's movement
+        if move_direction.length() > 0:
+            self.last_move_direction = move_direction.normalize()
         
         # Boundary checks
         self.pos_x = max(0, min(screen_width - self.player_img.get_width(), self.pos_x))
@@ -46,10 +60,22 @@ class Player:
             self.movement('w', dt, screen_width, screen_height)
         if keys[pygame.K_s]:
             self.movement('s', dt, screen_width, screen_height)
-        if keys[pygame.K_e]:
+        if keys[pygame.K_e] and (current_time - self.last_ability_use_time >= self.ability_cooldown):
             self.circle_active = True
             self.circle_radius = 0
             self.last_ability_use_time = current_time
+        if keys[pygame.K_LSHIFT] and current_time - self.last_shift_ability_time >= self.shift_ability_cooldown:
+            self.activate_shift_ability(dt)
+            self.last_shift_ability_time = current_time
+        
+    def activate_shift_ability(self, dt):
+        move_amount = 192
+        self.pos_x += self.last_move_direction.x * move_amount
+        self.pos_y += self.last_move_direction.y * move_amount
+
+
+
+
 
     def rect(self):
         return self.player_img.get_rect(topleft=(self.pos_x, self.pos_y))
@@ -57,7 +83,8 @@ class Player:
     def take_dmg(self):
         self.lives -= 1
         if self.lives <= 0:
-            pygame.quit()
+            self.game_over = True #Indicates player has died
+        return self.game_over
         #handle player death ******NEED TO CHANGE HOW THIS OPERATES 
     
     def update_circle(self, dt):
