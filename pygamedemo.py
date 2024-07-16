@@ -271,6 +271,7 @@ while running:
         game_over_text = game_over_font.render('YOU DIED', True, (255,0,0))
         game_over_rect = game_over_text.get_rect(center=(screen_width // 2, screen_height // 2))
         screen.blit(game_over_text, game_over_rect)
+        screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
 
          #Update and draw stars
         for star in stars:
