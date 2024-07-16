@@ -57,7 +57,7 @@ running = True
 
 # Initialize stars
 star_img = pygame.image.load("assets/Star.png")  # Load the star image
-num_stars = 50
+num_stars = 100
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
 #Variables for spawning enemies
@@ -181,14 +181,6 @@ while running:
          spawn_enemy()
          time_since_last_spawn = 0
 
-    #Draw stars
-    for star in stars:
-       star.draw(screen) 
-
-    # Move bullets
-    for bullet in bullets:
-        bullet.move(dt)
-
     # List to keep track of enemies to be removed
     enemies_to_remove = set()
     bullets_to_remove = set()
@@ -252,9 +244,6 @@ while running:
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
     
     lives_model.draw(screen)
-    
-    for bullet in bullets:
-        screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))             
 
     #draw the score and level name from HUD class
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
