@@ -265,15 +265,31 @@ while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-                game_over = False #Exit game over screen loop
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    # Reset game state
+                    player_model.reset()
+                    lives_model.reset()
+                    HUD_model.reset()
+                    bullets.clear()
+                    enemies.clear()
+                    game_over = False
+                    # Reset time variables
+                    time_since_last_spawn = 0
+                    time_since_last_shot = 0
 
-        #Draw game over screen
-        screen.fill((0,0,0)) #Black Background
+        screen.fill((0, 0, 0))
         game_over_font = pygame.font.Font('freesansbold.ttf', 64)
-        game_over_text = game_over_font.render('YOU DIED', True, (255,0,0))
+        game_over_text = game_over_font.render('YOU DIED', True, (255, 0, 0))
         game_over_rect = game_over_text.get_rect(center=(screen_width // 2, screen_height // 2))
         screen.blit(game_over_text, game_over_rect)
         screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
+
+            # Draw "Press [Enter] to restart" prompt
+        prompt_font = pygame.font.Font('freesansbold.ttf', 32)
+        prompt_text = prompt_font.render('Press [Enter] to restart', True, (255, 255, 255))
+        prompt_rect = prompt_text.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+        screen.blit(prompt_text, prompt_rect)
 
          #Update and draw stars
         for star in stars:

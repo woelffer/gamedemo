@@ -25,7 +25,18 @@ class Player:
         self.flash_timer = 0
         self.flash_color = (255, 0, 0)  # Red tint for flash effect
 
-
+    def reset(self):
+        self.player_img = pygame.image.load("assets/Spaceship.png")
+        self.pos_x, self.pos_y = 600, 600
+        self.vel_x, self.vel_y = 400, 400
+        self.lives = 3
+        self.circle_radius = 0
+        self.circle_active = False
+        self.last_ability_use_time = -self.ability_cooldown
+        self.last_shift_ability_time = -self.shift_ability_cooldown
+        self.last_move_direction = pygame.math.Vector2(0, 0)
+        self.is_flashing = False
+        self.flash_timer = 0     
 
     def movement(self, movement, dt, screen_width, screen_height):
         move_direction = pygame.math.Vector2(0,0)

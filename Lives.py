@@ -6,7 +6,11 @@ class Lives:
         self.lives_img = pygame.transform.scale(self.lives_img, (50, 50))
         self.remaining_lives = 3  
         self.positions = [(0, 670), (50, 670), (100, 670)]  # Example positions for lives display
-   
+    
+
+    def reset(self):
+        self.remaining_lives = 3  # Reset remaining lives to initial value
+        
     def draw(self, screen):
         for i in range(self.remaining_lives):
             pos_x, pos_y = self.positions[i]

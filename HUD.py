@@ -24,6 +24,16 @@ class HUD:
         self.score_font = pygame.font.Font('freesansbold.ttf', 24)
         self.levelName_font = pygame.font.Font('freesansbold.ttf', 12)
 
+    def reset(self):
+        # Reset all attributes to their initial values
+        self.score_rect_pos = []
+        self.score_rect = []
+        self.levelName = ''
+        self.levelName_rect = []
+        self.score = 0
+        self.remaining_lives = 3
+        self.lives_rect_pos = []
+        
     def draw_abilities(self, screen, player):
         screen_width, screen_height = screen.get_size()
         padding = 10  # Padding from the edges
