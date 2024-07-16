@@ -6,6 +6,7 @@ import pygame
 class Player:
     def __init__(self):
         self.player_img = pygame.image.load("assets/Spaceship.png")
+        self.original_img = self.player_img.copy() 
         self.pos_x, self.pos_y = 600, 600
         self.vel_x, self.vel_y = 400, 400
         self.lives = 3
@@ -19,6 +20,11 @@ class Player:
         self.last_shift_ability_time = -self.shift_ability_cooldown
         self.last_move_direction = pygame.math.Vector2(0,0)
         self.game_over = False #Flag to indicate game state
+        self.is_flashing = False
+        self.flash_duration = 0.1
+        self.flash_timer = 0
+        self.flash_color = (255, 0, 0)  # Red tint for flash effect
+
 
 
     def movement(self, movement, dt, screen_width, screen_height):
@@ -73,10 +79,6 @@ class Player:
         self.pos_x += self.last_move_direction.x * move_amount
         self.pos_y += self.last_move_direction.y * move_amount
 
-
-
-
-
     def rect(self):
         return self.player_img.get_rect(topleft=(self.pos_x, self.pos_y))
     
@@ -84,8 +86,26 @@ class Player:
         self.lives -= 1
         if self.lives <= 0:
             self.game_over = True #Indicates player has died
+        
+        #Trigger Flash
+        self.is_flashing = True
+        self.flash_timer = self.flash_duration
+
         return self.game_over
-        #handle player death ******NEED TO CHANGE HOW THIS OPERATES 
+
+    def update(self, dt):
+        if self.is_flashing:
+            self.flash_timer -= dt
+            if self.flash_timer <= 0:
+                self.is_flashing = False
+                self.player_img = self.original_img.copy()  # Restore original image
+            else:
+                # Apply flash effect by tinting the image
+                self.player_img = self.original_img.copy()
+                flash_surface = pygame.Surface(self.player_img.get_size()).convert_alpha()
+                flash_surface.fill(self.flash_color + (128,))  # Apply transparency to the tint
+                self.player_img.blit(flash_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+         
     
     def update_circle(self, dt):
         if self.circle_active:

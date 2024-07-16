@@ -244,6 +244,7 @@ while running:
           
 
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
+    player_model.update(dt)
     
     lives_model.draw(screen)
 
