@@ -265,6 +265,7 @@ while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                game_over = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
                     # Reset game state
