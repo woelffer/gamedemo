@@ -240,6 +240,7 @@ while running:
         enemy.move_towards_player(player_model, dt)
         enemy.update()
         enemy.draw(screen)
+        enemy.draw_collision_rect(screen)
           
 
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))

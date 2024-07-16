@@ -4,8 +4,12 @@ from pygame import mixer
 
 class Enemy:
     def __init__(self, posx, posy):
-        self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png")
-        self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
+        try:
+            self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png")
+            self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
+        except pygame.error as e:
+            print(f"Error loading image: {e}")
+            return
         self.pos_x, self.pos_y = posx, posy
         self.base_speed = 200
         self.speed = self.base_speed
@@ -16,8 +20,13 @@ class Enemy:
         self.original_dmg_img = self.dmg_img #keep copy of the original dmg image
         self.damaged = False
         self.damaged_time = 0 # Time when the enemy was last damaged
-        self.death_sound = mixer.Sound("audio/retro-explosion-2.wav")
-        self.death_sound.set_volume(0.3)
+        try:
+            self.death_sound = mixer.Sound("audio/retro-explosion-2.wav")
+            self.death_sound.set_volume(0.2)
+        except pygame.error as e:
+            print(f"Error loading sound: {e}")
+            self.death_sound = None
+
         self.sound_played = False #Flag to track if the sound has been played
         self.angle = 0 #Initial angle
  
@@ -51,6 +60,14 @@ class Enemy:
         else:
             screen.blit(rotated_enemy_img, rotated_rect.topleft)
     
+    def draw_collision_rect(self, screen):
+        # Get the rotated image and its rectangle centered at the enemy's position
+        rotated_img = pygame.transform.rotate(self.enemy_img, -self.angle)
+        rotated_rect = rotated_img.get_rect(center=(self.pos_x, self.pos_y))
+        # Draw the collision rectangle around the enemy
+        rect = self.rect()
+        pygame.draw.rect(screen, (255, 0, 0), rotated_rect, 2)  # Red color, 2 pixels thick
+    
     def draw_dmg(self, screen):
     # Temporarily set the damaged flag and draw the damaged image
         self.damaged = True
@@ -82,6 +99,8 @@ class Enemy:
             print(f"Pygame error occurred: {e}")
 
     def rect(self):
+        rotated_img = pygame.transform.rotate(self.enemy_img, -self.angle)
+        rotated_rect = rotated_img.get_rect(center=(self.pos_x, self.pos_y))
         return self.enemy_img.get_rect(topleft = (self.pos_x, self.pos_y))
     
     def increase_speed(self, factor):
