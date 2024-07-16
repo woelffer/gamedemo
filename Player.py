@@ -1,7 +1,7 @@
 
 ###Player class below
 import pygame
-
+from pygame import mixer 
 
 class Player:
     def __init__(self):
@@ -24,6 +24,10 @@ class Player:
         self.flash_duration = 0.1
         self.flash_timer = 0
         self.flash_color = (255, 0, 0)  # Red tint for flash effect
+        self.phase_sound = mixer.Sound("audio/Spaceship_Phase.wav")
+        self.phase_sound.set_volume(0.8)
+        self.dmg_sound = mixer.Sound("audio/Spaceship_DMG.wav")
+        self.dmg_sound.set_volume(0.7)
 
     def reset(self):
         self.player_img = pygame.image.load("assets/Spaceship.png").convert_alpha()
@@ -87,6 +91,8 @@ class Player:
         
     def activate_shift_ability(self, dt):
         move_amount = 192
+        channel = pygame.mixer.Channel(4)
+        channel.play(self.phase_sound)
         self.pos_x += self.last_move_direction.x * move_amount
         self.pos_y += self.last_move_direction.y * move_amount
 
@@ -95,6 +101,8 @@ class Player:
     
     def take_dmg(self):
         self.lives -= 1
+        channel = pygame.mixer.Channel(5)
+        channel.play(self.dmg_sound)
         if self.lives <= 0:
             self.game_over = True #Indicates player has died
         
