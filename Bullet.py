@@ -5,7 +5,7 @@ class Bullet:
     def __init__(self, position, speed):
         self.bullet_img = pygame.image.load("assets/Bullet.png")
         self.bullet_sound = mixer.Sound("audio/8-bit-machine-gun.aiff")
-        self.bullet_sound.set_volume(0.2)
+        self.bullet_sound.set_volume(0.1)
         self.pos_x, self.pos_y = position
         self.speed = speed
     

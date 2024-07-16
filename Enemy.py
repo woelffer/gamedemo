@@ -22,7 +22,7 @@ class Enemy:
         self.damaged_time = 0 # Time when the enemy was last damaged
         try:
             self.death_sound = mixer.Sound("audio/retro-explosion-2.wav")
-            self.death_sound.set_volume(0.2)
+            self.death_sound.set_volume(0.1)
         except pygame.error as e:
             print(f"Error loading sound: {e}")
             self.death_sound = None
