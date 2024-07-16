@@ -7,12 +7,23 @@ import Lives
 import HUD
 import random
 import math
+import json
 from pygame import mixer
 
 
 
 #Initialize pygame
 pygame.init()
+
+#Load quotes from JSON file
+with open('assets/quotes.json') as f:
+    quotes_data = json.load(f)
+
+#Extract quotes array
+quotes = quotes_data['quotes']
+
+#Select a random quote
+random_quote = random.choice(quotes)
 
 #Starting the mixer
 mixer.init()
@@ -279,6 +290,8 @@ while running:
                     time_since_last_spawn = 0
                     time_since_last_shot = 0
 
+                    random_quote = random.choice(quotes)
+
         screen.fill((0, 0, 0))
         game_over_font = pygame.font.Font('freesansbold.ttf', 64)
         game_over_text = game_over_font.render('YOU DIED', True, (255, 0, 0))
@@ -291,6 +304,12 @@ while running:
         prompt_text = prompt_font.render('Press [Enter] to restart', True, (255, 255, 255))
         prompt_rect = prompt_text.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
         screen.blit(prompt_text, prompt_rect)
+
+        # Display random quote
+        quote_font = pygame.font.Font('freesansbold.ttf', 24)
+        quote_text = quote_font.render(random_quote, True, (255, 255, 255))
+        quote_rect = quote_text.get_rect(center=(screen_width // 2, screen_height // 2 + 200))
+        screen.blit(quote_text, quote_rect)
 
          #Update and draw stars
         for star in stars:
