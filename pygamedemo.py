@@ -142,13 +142,14 @@ while running:
 
     #Draw Players
     screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
+    
     #Draw HUD calls below
     HUD_model.draw_abilities(screen, player_model)
 
     #screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
 
     #Draw Player lives
-    lives_model.draw(screen)
+    #lives_model.draw(screen)
 
 
     #Update and draw bullets
@@ -253,11 +254,12 @@ while running:
           
     player_model.update(dt)
     
-    lives_model.draw(screen)
+    #lives_model.draw(screen)
 
     #draw the score and level name from HUD class
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
     screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
+    HUD_model.draw_lives(screen, player_model.lives)
     
     if player_model.lives <= 0:
         game_over = True

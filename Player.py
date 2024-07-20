@@ -9,7 +9,7 @@ class Player:
         self.original_img = self.player_img.copy() 
         self.pos_x, self.pos_y = 600, 600
         self.vel_x, self.vel_y = 600, 600
-        self.lives = 3
+        self.lives = 5
         self.circle_radius = 0
         self.circle_max_radius = 64*2   #twice the size of player sprite
         self.circle_growth_rate = 400 #pixels per second
@@ -33,7 +33,7 @@ class Player:
         self.player_img = pygame.image.load("assets/Spaceship.png").convert_alpha()
         self.pos_x, self.pos_y = 600, 600
         self.vel_x, self.vel_y = 600, 600
-        self.lives = 3
+        self.lives = 5
         self.circle_radius = 0
         self.circle_active = False
         self.last_ability_use_time = -self.ability_cooldown

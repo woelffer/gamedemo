@@ -94,12 +94,33 @@ class HUD:
 
 
 
+        
+
+        
+
     def draw_lives(self, screen, lives):
         screen_width, screen_height = screen.get_size()
         pad_x = 10
-        pad_y = 10
+        pad_y = 50
+        counter = 0
+        ##print(lives, end = '\n')
 
-        self.lives_rect_pos = screen_height - screen_width, screen_height - screen_width
-        #calc positions 
-        #draw lives
+        #calc positions for lives placement
+        for live in range(lives):
+            counter = live
+            self.lives_rect_pos.append(((screen_width - screen_width) + pad_x, screen_height - pad_y - (pad_y * counter)))
+            
+            
+        #draw lives in rect positions
+
+        for rect in self.lives_rect_pos:
+            rect_pos_x, rect_pos_y = rect
+            #print(rect_pos_x, end = '\n')
+            #print(rect_pos_y, end = '\n')
+            for i in range(lives):
+                screen.blit(self.lives_img, (rect_pos_x, rect_pos_y))   
+              
+        self.lives_rect_pos.clear()
+        return
+     
     
