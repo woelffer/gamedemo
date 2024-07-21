@@ -186,15 +186,17 @@ while running:
         enemy.increase_speed(speed_factor)
 
     # Check for bullet collisions with enemies
+    
     for bullet in bullets:
+        #print(bullet)
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
                 enemy.take_dmg()
-                bullets_to_remove.add(bullet)  # Remove bullet after collision
+                bullets.remove(bullet)  # Remove bullet after collision
                 if not enemy.is_alive():
-
                     enemies_to_remove.add(enemy)  # Remove enemy if health is zero
-                    
+            if not bullet.rect() in screen.get_rect():
+                bullets.remove(bullet)
                 break  # Exit the inner loop to avoid modifying the list during iteration           
    
 
@@ -259,6 +261,7 @@ while running:
           
     player_model.update(dt)
     
+
     #draw the score and level name from HUD class
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
     screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
