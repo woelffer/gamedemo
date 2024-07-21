@@ -45,7 +45,7 @@ screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF
 #Initialize HUD
 HUD_model = HUD.HUD()
 
-#Initialize Player 
+#Initialize Player, Lives, Enemy class objects
 player_model = Player.Player()
 enemies = [Enemy.Enemy(0, 0), Enemy.Enemy(400, 0), Enemy.Enemy(600, 0)]  # List of enemies
 lives_model = Lives.Lives()
@@ -123,6 +123,9 @@ while title_screen_active:
 
 
 while running:
+    ###
+    ### Time settings and clock setup/ clear screen each frame
+    ###
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
 
@@ -133,32 +136,9 @@ while running:
     screen.fill((0,0,0))
 
 
-    #Update and draw the player's circle
-    player_model.update_circle(dt)
-    player_model.draw_circle(screen)
-
-    # Update and draw stars
-    for star in stars:
-        star.move(dt)
-        star.draw(screen)
-
-    #Draw Players
-    screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
-    
-    #Draw HUD calls below
-    HUD_model.draw_abilities(screen, player_model)
-    HUD_model.draw_lives(screen, player_model.lives)
-
-    #screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
-
-    #Draw Player lives
-    #lives_model.draw(screen)
-
-
-    #Update and draw bullets
-    for bullet in bullets:
-        bullet.move(dt)
-        screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))            
+    ###
+    ### Event handling and what have you
+    ###
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -236,6 +216,20 @@ while running:
                 enemy.health = 0
                 if not enemy.is_alive():
                     enemies_to_remove.add(enemy)
+    
+                    
+    #####
+    ##### Update/Draw calls each frame below
+    #####
+    
+    #Player update/draw calls
+    screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
+    player_model.update_circle(dt)
+    player_model.draw_circle(screen)
+
+    #HUD update/ draw calls
+    HUD_model.draw_abilities(screen, player_model)
+    HUD_model.draw_lives(screen, player_model.lives)
 
     # Remove marked enemies and bullets
     for enemy in enemies_to_remove:
@@ -244,12 +238,17 @@ while running:
         enemies.remove(enemy)
         HUD_model.update_score()
     
-
+    #Update and draw stars
+    for star in stars:
+        star.move(dt)
+        star.draw(screen)
   
     for bullet in bullets_to_remove:
         bullets.remove(bullet)
  
-
+    for bullet in bullets:
+        bullet.move(dt)
+        screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y)) 
 
     # Move and update enemies/lives/bullets/score
     for enemy in enemies:
@@ -260,8 +259,6 @@ while running:
           
     player_model.update(dt)
     
-    #lives_model.draw(screen)
-
     #draw the score and level name from HUD class
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
     screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
