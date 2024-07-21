@@ -190,7 +190,7 @@ while running:
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
                 enemy.take_dmg()
-                bullets_to_remove.add(bullet)  # Remove bullet after collision
+                bullets.pop()
                 if not enemy.is_alive():
 
                     enemies_to_remove.add(enemy)  # Remove enemy if health is zero
