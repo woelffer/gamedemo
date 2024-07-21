@@ -5,8 +5,8 @@ from pygame import mixer
 class Enemy:
     def __init__(self, posx, posy):
         try:
-            self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png")
-            self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png")
+            self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png").convert_alpha()
+            self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png").convert_alpha()
         except pygame.error as e:
             print(f"Error loading image: {e}")
             return

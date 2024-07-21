@@ -13,6 +13,7 @@ from pygame import mixer
 
 
 #Initialize pygame
+pygame.mixer.pre_init(44100, 16, 2, 4096)
 pygame.init()
 
 #Load quotes from JSON file
@@ -26,7 +27,7 @@ quotes = quotes_data['quotes']
 random_quote = random.choice(quotes)
 
 #Starting the mixer
-mixer.init()
+#mixer.init()
 theme = mixer.Sound('audio/retro_song.mp3')
 channel = mixer.Channel(3)
 channel.play(theme, loops=-1) #Loop the music indefinitely
@@ -36,13 +37,13 @@ channel.set_volume(0.1)
 title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
  
 
-#Initialize HUD
-HUD_model = HUD.HUD()
-
 #Screen Dimensions
 screen_width, screen_height = 1280, 720
 pygame.display.set_caption("Aerials")
 screen = pygame.display.set_mode((screen_width, screen_height), pygame.DOUBLEBUF | pygame.HWSURFACE)
+
+#Initialize HUD
+HUD_model = HUD.HUD()
 
 #Initialize Player 
 player_model = Player.Player()
@@ -66,7 +67,7 @@ running = True
 game_over = False # Flag to track game over state
 
 # Initialize stars
-star_img = pygame.image.load("assets/Star.png")  # Load the star image
+star_img = pygame.image.load("assets/Star.png").convert_alpha()  # Load the star image
 num_stars = 100
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
@@ -242,9 +243,12 @@ while running:
         enemy.sound_played = True #Set flag to indicat the sound has been playedS
         enemies.remove(enemy)
         HUD_model.update_score()
-        
+    
+
+  
     for bullet in bullets_to_remove:
         bullets.remove(bullet)
+ 
 
 
     # Move and update enemies/lives/bullets/score
@@ -252,7 +256,7 @@ while running:
         enemy.move_towards_player(player_model, dt)
         enemy.update()
         enemy.draw(screen)
-        enemy.draw_collision_rect(screen)
+        #enemy.draw_collision_rect(screen)
           
     player_model.update(dt)
     
