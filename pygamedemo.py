@@ -187,15 +187,16 @@ while running:
 
     # Check for bullet collisions with enemies
     for bullet in bullets:
-        #print(bullet)
+        print(bullet)
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
                 enemy.take_dmg()
                 bullets.remove(bullet)  # Remove bullet after collision
                 if not enemy.is_alive():
                     enemies_to_remove.add(enemy)  # Remove enemy if health is zero
-                    
-                break  # Exit the inner loop to avoid modifying the list during iteration           
+            if not bullet.rect() in screen.get_rect():
+                bullets.remove(bullet)
+                break  # Exit the inner loop to avoid modifying the list during iteration     
    
 
     # Check for collisions between player and enemies
