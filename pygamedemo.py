@@ -120,6 +120,7 @@ while title_screen_active:
 
 
 
+
 while running:
     #Use Delta Time: Implement delta time for frame-independent movement.
     dt = clock.tick(60) / 1000.0
@@ -145,6 +146,7 @@ while running:
     
     #Draw HUD calls below
     HUD_model.draw_abilities(screen, player_model)
+    HUD_model.draw_lives(screen, player_model.lives)
 
     #screen.blit(enemy_model.enemy_img, (enemy_model.pos_x, enemy_model.pos_y))
 
@@ -259,7 +261,7 @@ while running:
     #draw the score and level name from HUD class
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
     screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
-    HUD_model.draw_lives(screen, player_model.lives)
+    
     
     if player_model.lives <= 0:
         game_over = True
@@ -267,7 +269,7 @@ while running:
     pygame.display.flip()
     
     clock.tick(60)
-
+    print(clock.get_fps())
     #Game over screen
 
     while game_over:

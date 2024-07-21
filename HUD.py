@@ -93,11 +93,6 @@ class HUD:
         return self.levelName_font.render('Area: ' + str(level_name), True, self.WHITE, self.BLACK)
 
 
-
-        
-
-        
-
     def draw_lives(self, screen, lives):
         screen_width, screen_height = screen.get_size()
         pad_x = 10
@@ -117,10 +112,10 @@ class HUD:
             rect_pos_x, rect_pos_y = rect
             #print(rect_pos_x, end = '\n')
             #print(rect_pos_y, end = '\n')
-            for i in range(lives):
-                screen.blit(self.lives_img, (rect_pos_x, rect_pos_y))   
+           
+            screen.blit(self.lives_img, (rect_pos_x, rect_pos_y))   
               
         self.lives_rect_pos.clear()
-        return
+        
      
     
