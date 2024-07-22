@@ -231,8 +231,9 @@ while running:
         star.move(dt)
         star.draw(screen)
   
-    for bullet in bullets_to_remove:              
-        bullets.remove(bullet)
+    for bullet in bullets_to_remove: 
+        if bullet in bullets:             
+            bullets.remove(bullet)
  
     for bullet in bullets:
         bullet.move(dt)
