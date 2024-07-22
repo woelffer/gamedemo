@@ -174,7 +174,7 @@ while running:
     # Check for bullet collisions with enemies and bullet out of bounds
     for bullet in bullets:
         if not bullet.rect() in screen.get_rect(): #remove bullet if bullet no longer on screen
-            bullets.remove(bullet)
+            bullets_to_remove(bullet)
             print(bullet)
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
