@@ -174,12 +174,12 @@ while running:
     # Check for bullet collisions with enemies and bullet out of bounds
     for bullet in bullets:
         if not bullet.rect() in screen.get_rect(): #remove bullet if bullet no longer on screen
-            bullets_to_remove(bullet)
+            bullets_to_remove.add(bullet)
             print(bullet)
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
                 enemy.take_dmg()
-                bullets.remove(bullet)  # Remove bullet after collision
+                bullets_to_remove.add(bullet)  # Remove bullet after collision
                 if not enemy.is_alive():
                     enemies_to_remove.add(enemy)  # Remove enemy if health is zero
 
@@ -231,7 +231,7 @@ while running:
         star.move(dt)
         star.draw(screen)
   
-    for bullet in bullets_to_remove:
+    for bullet in bullets_to_remove:              
         bullets.remove(bullet)
  
     for bullet in bullets:
