@@ -25,7 +25,7 @@ class Player:
         self.flash_timer = 0
         self.flash_color = (255, 0, 0)  # Red tint for flash effect
         self.phase_sound = mixer.Sound("audio/Spaceship_Phase.wav")
-        self.phase_sound.set_volume(0.8)
+        self.phase_sound.set_volume(2.0)
         self.dmg_sound = mixer.Sound("audio/Spaceship_DMG.wav")
         self.dmg_sound.set_volume(0.7)
 
