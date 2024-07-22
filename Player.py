@@ -151,6 +151,6 @@ class Player:
 
             pygame.draw.circle(screen, (0, 128, 255), center, outer_radius, 2)  # Blue outer circle
 
-  
+
 
             

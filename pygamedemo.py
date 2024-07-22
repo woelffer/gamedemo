@@ -152,23 +152,9 @@ while running:
 
     if key[pygame.K_SPACE] and time_since_last_shot >= BULLET_COOLDOWN:
 
-        # Reset the cooldown timer
         time_since_last_shot = 0
-
-        # Calculate the bullet positions relative to the player
-        bullet_offset_1 = (54, 6)
-        bullet_offset_2 = (4, 6)
-        bullet_position_1 = [player_model.pos_x + bullet_offset_1[0], player_model.pos_y + bullet_offset_1[1]]
-        bullet_position_2 = [player_model.pos_x + bullet_offset_2[0], player_model.pos_y + bullet_offset_2[1]]
-        # Create new bullets and add them to the list
-        new_bullet_1 = Bullet.Bullet(bullet_position_1, bullet_speed)
-        new_bullet_2 = Bullet.Bullet(bullet_position_2, bullet_speed)
-        new_bullet_1.play_sound()
-        new_bullet_2.play_sound()
-        bullets.append(new_bullet_1)
-        bullets.append(new_bullet_2)
-        if event.type == pygame.QUIT:
-            running = False
+        new_bullets = Bullet.Bullet.create_bullets(player_model, bullet_speed)
+        bullets.extend(new_bullets)
 
     #Spawn new enemies at intervals 
     if time_since_last_spawn >= SPAWN_INTERVAL:
