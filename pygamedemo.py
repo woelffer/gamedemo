@@ -211,11 +211,20 @@ while running:
     #####
     
     #Player update/draw calls
-    screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
+
+    #update the player's state and animations
+    
+    #screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
+
+    player_model.update_position(dt)
+
+    #Draw player and the line
+    player_model.draw(screen)
+
     player_model.update_circle(dt)
     player_model.draw_circle(screen)
 
-    #HUD update/ draw calls
+    #HUD update/ draw callsd
     HUD_model.draw_abilities(screen, player_model)
     HUD_model.draw_lives(screen, player_model.lives)
 
@@ -260,7 +269,7 @@ while running:
     pygame.display.flip()
     
     clock.tick(60)
-    print(clock.get_fps())
+    #print(clock.get_fps())
     #Game over screen
 
     while game_over:

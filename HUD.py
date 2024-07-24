@@ -58,7 +58,7 @@ class HUD:
         screen.blit(text_surface, text_rect)
         
          # Draw text next to the shift ability icon
-        shift_cooldown_remaining = max(0, player.ability_cooldown - (current_time - player.last_shift_ability_time))
+        shift_cooldown_remaining = max(0, player.shift_ability_cooldown - (current_time - player.last_shift_ability_time))
         if shift_cooldown_remaining > 0:
             shift_text_surface = self.ability_font.render(f"Shift CD: {shift_cooldown_remaining:.1f}s", True, (255, 255, 255))
         else:
