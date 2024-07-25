@@ -68,8 +68,8 @@ class HUD:
         shift_text_rect.centery = circle_icon_pos[1] + icon_size // 2 + text_rect.height + padding
         screen.blit(shift_text_surface, shift_text_rect)
         
-    def update_score(self):
-        self.score += 200
+    def update_score(self, amount):
+        self.score += amount
         
     def draw_score(self, screen):
         screen_width, screen_height = screen.get_size()

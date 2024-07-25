@@ -7,6 +7,7 @@ import Lives
 import HUD
 import random
 import math
+import Levels
 import json
 from pygame import mixer
 
@@ -22,21 +23,10 @@ channel.set_volume(0.1)
 
 pygame.init()
 
-#Load quotes from JSON file
-with open('assets/quotes.json') as f:
-    quotes_data = json.load(f)
-
-#Extract quotes array
-quotes = quotes_data['quotes']
-
-#Select a random quote
-random_quote = random.choice(quotes)
-
-
 #LOad title screen image
 title_screen_img = pygame.image.load('assets/Title_Screen_nobg.png')
  
-
+clock = pygame.time.Clock()
 #Screen Dimensions
 screen_width, screen_height = 1280, 720
 pygame.display.set_caption("Aerials")
@@ -50,6 +40,7 @@ player_model = Player.Player()
 enemies = [Enemy.Enemy(0, 0), Enemy.Enemy(400, 0), Enemy.Enemy(600, 0)]  # List of enemies
 lives_model = Lives.Lives()
 
+
 #Bullet initialize
 bullet_speed = -500
 bullets = []
@@ -62,7 +53,7 @@ BULLET_COOLDOWN = 0.05
 time_since_last_shot = 0
 
 
-clock = pygame.time.Clock()
+
 running = True
 game_over = False # Flag to track game over state
 
@@ -81,44 +72,8 @@ def spawn_enemy():
      new_enemy = Enemy.Enemy(x_pos, y_pos)
      enemies.append(new_enemy)
 
-# Load font for the title screen prompt
-prompt_font = pygame.font.Font('freesansbold.ttf', 28)
-prompt_text = prompt_font.render('Press [Enter] to Start', True, HUD_model.WHITE)
-prompt_rect = prompt_text.get_rect(center=(screen_width // 2, screen_height // 2 + 100))
-
-#Title Screen Loop
-
-title_screen_active = True
-
-while title_screen_active:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN: #Enter to start 
-                title_screen_active = False
-
-    #Clear screen
-    screen.fill((0,0,0))
-
-    #Update and draw stars
-    for star in stars:
-        star.move(1/60.0) #Use a fixed dt for consistent movement
-        star.draw(screen)
-    
-    #Draw Title
-    screen.blit(title_screen_img, (screen_width // 2 - title_screen_img.get_width() // 2,
-                                   screen_height // 2 - title_screen_img.get_height() // 2))
-    
-    #Draw the "Press [Enter] prompt"
-    screen.blit(prompt_text, prompt_rect)
-    
-    #Update display
-    pygame.display.flip()
-
-    clock.tick(60)
-
+level = Levels.Levels(stars, screen, screen_width, screen_height, title_screen_img, clock, HUD_model)
+level.TitleScreen()
 
 
 
@@ -213,8 +168,6 @@ while running:
     #Player update/draw calls
 
     #update the player's state and animations
-    
-    #screen.blit(player_model.player_img, (player_model.pos_x, player_model.pos_y))
 
     player_model.update_position(dt)
 
@@ -233,7 +186,7 @@ while running:
         enemy.play_sound()
         enemy.sound_played = True #Set flag to indicat the sound has been playedS
         enemies.remove(enemy)
-        HUD_model.update_score()
+        HUD_model.update_score(200)
     
     #Update and draw stars
     for star in stars:
@@ -264,62 +217,13 @@ while running:
     
     
     if player_model.lives <= 0:
-        game_over = True
+        level.EndScreen(player_model, lives_model, bullets, enemies, time_since_last_spawn, time_since_last_shot, HUD_model)
+        
+        # Optionally break out of the loop after game over handling
+        #running = False
 
     pygame.display.flip()
     
     clock.tick(60)
-    #print(clock.get_fps())
-    #Game over screen
-
-    while game_over:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-                game_over = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    # Reset game state
-                    player_model.reset()
-                    lives_model.reset()
-                    HUD_model.reset()
-                    bullets.clear()
-                    enemies.clear()
-                    game_over = False
-                    # Reset time variables
-                    time_since_last_spawn = 0
-                    time_since_last_shot = 0
-
-                    random_quote = random.choice(quotes)
-
-        screen.fill((0, 0, 0))
-        game_over_font = pygame.font.Font('freesansbold.ttf', 64)
-        game_over_text = game_over_font.render('YOU DIED', True, (255, 0, 0))
-        game_over_rect = game_over_text.get_rect(center=(screen_width // 2, screen_height // 2))
-        screen.blit(game_over_text, game_over_rect)
-        screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
-
-            # Draw "Press [Enter] to restart" prompt
-        prompt_font = pygame.font.Font('freesansbold.ttf', 32)
-        prompt_text = prompt_font.render('Press [Enter] to restart', True, (255, 255, 255))
-        prompt_rect = prompt_text.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
-        screen.blit(prompt_text, prompt_rect)
-
-        # Display random quote
-        quote_font = pygame.font.Font('freesansbold.ttf', 24)
-        quote_text = quote_font.render(random_quote, True, (255, 255, 255))
-        quote_rect = quote_text.get_rect(center=(screen_width // 2, screen_height // 2 + 200))
-        screen.blit(quote_text, quote_rect)
-
-         #Update and draw stars
-        for star in stars:
-            star.move(1/60.0) #Use a fixed dt for consistent movement
-            star.draw(screen)
-    
-
-        pygame.display.flip()
-
-        clock.tick(60)
-
 
 pygame.quit()
