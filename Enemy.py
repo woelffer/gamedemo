@@ -3,7 +3,7 @@ import math
 from pygame import mixer
 
 class Enemy:
-    def __init__(self, posx, posy):
+    def __init__(self, posx, posy, shooter_tag):
         try:
             self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png").convert_alpha()
             self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png").convert_alpha()
@@ -29,7 +29,8 @@ class Enemy:
 
         self.sound_played = False #Flag to track if the sound has been played
         self.angle = 0 #Initial angle
- 
+        self.shooter_tag = shooter_tag # Flag to switch spawn types/ enemy AI
+        
 
     def move_towards_player(self, player, dt):
         #Find direction vector (dx, dy) between enemy and player
@@ -50,6 +51,36 @@ class Enemy:
         self.pos_x += dx * self.speed * dt
         self.pos_y += dy * self.speed * dt
     
+
+
+        #move towards the enemey from offscreen but stop at distance less than 500 - could use more work
+    def move_to_shoot(self, player, dt):
+
+        #find direction vector between enemy and player
+        dx = player.pos_x - self.pos_x
+        dy = player.pos_y - self.pos_y
+      
+        #calc distance
+        distance = math.sqrt(dx ** 2 + dy **2)
+        if distance != 500:
+            #print(distance)
+            dx /= distance
+            dy /= distance
+        if distance <= 500:
+            dx /= distance
+            dy /= distance
+            self.pos_x += dx * self.speed * dt
+            self.speed = 0
+
+        self.angle = math.degrees(math.atan2(dy, dx)) + 90
+
+        #update the enemy pos
+        self.pos_x += dx * self.speed * dt
+        self.pos_y += dy * self.speed * dt
+
+
+
+
     def draw(self, screen):
         #Rotate the enmey image based on the angle
         rotated_enemy_img = pygame.transform.rotate(self.original_enemy_img, -self.angle)

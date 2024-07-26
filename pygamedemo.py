@@ -55,21 +55,23 @@ HUD_model = HUD.HUD()
 
 #Initialize Player, Lives, Enemy class objects
 player_model = Player.Player()
-enemies = [Enemy.Enemy(0, 0), Enemy.Enemy(400, 0), Enemy.Enemy(600, 0)]  # List of enemies
+enemies = [Enemy.Enemy(0, 0, False), Enemy.Enemy(400, 0, False), Enemy.Enemy(600, 0, False)]  # List of enemies
 lives_model = Lives.Lives()
+
 
 
 #Bullet initialize
 bullet_speed = -500
 bullets = []
+enemy_bullets = []
 
 #Can ADJUST THIS WHEN WE Introduce levels and powerups
 BULLET_COOLDOWN = 0.05
-
+ENEMY_BULLET_CD = 1
 
 # Track the time since the last bullet was fired
 time_since_last_shot = 0
-
+time_enemy_last_shot = 0
 
 
 running = True
@@ -83,7 +85,7 @@ stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_sta
 #Variables for spawning enemies
 SPAWN_INTERVAL = 0.3 #Seconds between spawns
 time_since_last_spawn = 0
-
+#seed = random.seed(10)
 #used for differeniating star images as they appear to share the same memory address so python can't interpret a new star image
 # Requires numpy package to work properly 
 def images_different(img1, img2):
@@ -94,10 +96,16 @@ def images_different(img1, img2):
 
 
 def spawn_enemy():
-     x_pos = random.randint(0, screen_width - 64) #Enemy width 64 pixels 
-     y_pos = -64 #start offscreen
-     new_enemy = Enemy.Enemy(x_pos, y_pos)
-     enemies.append(new_enemy)
+    x_pos = random.randint(0, screen_width - 64) #Enemy width 64 pixels 
+    y_pos = -64 #start offscreen
+    rand = random.randrange(0, 9)
+    if rand >= 5:
+        new_enemy = Enemy.Enemy(x_pos, y_pos, True)
+        enemies.append(new_enemy)
+    elif rand <= 4: 
+        new_enemy = Enemy.Enemy(x_pos, y_pos, False)
+        enemies.append(new_enemy)
+   
 
 # Initialize score thresholds
 score_thresholds = {
@@ -143,7 +151,7 @@ while running:
 
     time_since_last_shot += dt  # Update the cooldown timer
     time_since_last_spawn += dt #Update spawn timer
-
+    time_enemy_last_shot += dt # update the enemy bullet timer
     
     update_music(HUD_model.score)
 
@@ -204,18 +212,26 @@ while running:
     bullets_to_remove = set()
     
 
-   
     speed_factor = 1 + (HUD_model.score // 5000) * 0.5  # Increase speed by 50% for every 5000 points
     
+    # code for enemies to shoot - Uses the angle to determine firing position then shoots along that delta. 
+    for enemy in enemies:
+        if enemy.shooter_tag is True and time_enemy_last_shot >= ENEMY_BULLET_CD:              
+            enemy_bullet = Bullet.Bullet((enemy.pos_x, enemy.pos_y), bullet_speed, player_model.pos_x, player_model.pos_y)
+            enemy_bullets.append(enemy_bullet)    
+            time_enemy_last_shot = 0
+            
+
 
     for enemy in enemies:
         enemy.increase_speed(speed_factor)
 
     # Check for bullet collisions with enemies and bullet out of bounds
     for bullet in bullets:
+        print("This is a player bullet address: ", bullet)
         if not bullet.rect() in screen.get_rect(): #remove bullet if bullet no longer on screen
             bullets_to_remove.add(bullet)
-            print(bullet)
+            #print(bullet)
         for enemy in enemies:
             if bullet.rect().colliderect(enemy.rect()):
                 enemy.take_dmg()
@@ -223,8 +239,23 @@ while running:
                 if not enemy.is_alive():
                     enemies_to_remove.add(enemy)  # Remove enemy if health is zero
 
-                break  # Exit the inner loop to avoid modifying the list during iteration     
-   
+                break  # Exit the inner loop to avoid modifying the list during iteration 
+            
+    # Check for enemy bullet out of bounds and enemy bullet collide with player model
+    for enemy_bullet in enemy_bullets:
+        print("This is a enemy bullet address:", enemy_bullet)
+        if not enemy_bullet.rect() in screen.get_rect():
+            enemy_bullets.remove(enemy_bullet)
+            print(enemy_bullets)
+        
+        if enemy_bullet.rect().colliderect(player_model.rect()):
+            enemy_bullets.remove(enemy_bullet)
+            print(enemy_bullets)
+            break
+
+
+
+
 
     # Check for collisions between player and enemies
     for enemy in enemies:
@@ -284,11 +315,19 @@ while running:
  
     for bullet in bullets:
         bullet.move(dt)
-        screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y)) 
+        screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))
+    
+    for enemy_bullet in enemy_bullets:
+        enemy_bullet.enemy_bullet_move(dt)
+        screen.blit(enemy_bullet.bullet_img, (enemy_bullet.pos_x, enemy_bullet.pos_y))
 
     # Move and update enemies/lives/bullets/score
     for enemy in enemies:
-        enemy.move_towards_player(player_model, dt)
+        print(enemy.shooter_tag)
+        if enemy.shooter_tag == True:
+            enemy.move_to_shoot(player_model, dt)
+        elif enemy.shooter_tag == False:
+            enemy.move_towards_player(player_model, dt)
         enemy.update()
         enemy.draw(screen)
         #enemy.draw_collision_rect(screen)
