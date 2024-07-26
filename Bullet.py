@@ -3,8 +3,12 @@ import math
 from pygame import mixer 
 
 class Bullet: 
-    def __init__(self, position, speed, targetx, targety):
-        self.bullet_img = pygame.image.load("assets/Bullet.png").convert_alpha()
+    def __init__(self, position, speed, targetx, targety, bullet_type='player'):
+        if bullet_type == 'player':
+            self.bullet_img = pygame.image.load("assets/Bullet.png").convert_alpha()
+        else:
+            self.bullet_img = pygame.image.load("assets/Bullet_E.png").convert_alpha()
+        print(f"Loaded image for bullet type '{bullet_type}': {self.bullet_img}")
         self.bullet_sound = mixer.Sound("audio/8-bit-machine-gun.aiff")
         self.bullet_sound.set_volume(0.1)
         self.pos_x, self.pos_y = position
@@ -43,8 +47,8 @@ class Bullet:
         bullet_offset_2 = (4, 6)
         bullet_position_1 = [enemy_model.pos_x + bullet_offset_1[0], enemy_model.pos_y + bullet_offset_1[1]]
         bullet_position_2 = [enemy_model.pos_x + bullet_offset_2[0], enemy_model.pos_y + bullet_offset_2[1]]
-        new_bullet_1 = Bullet(bullet_position_1, bullet_speed, self.targetx, self.targety)
-        new_bullet_2 = Bullet(bullet_position_2, bullet_speed, self.targetx, self.targety)
+        new_bullet_1 = Bullet(bullet_position_1, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
+        new_bullet_2 = Bullet(bullet_position_2, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
         new_bullet_1.play_sound()
         new_bullet_2.play_sound()
         return [new_bullet_1, new_bullet_2]
@@ -56,8 +60,8 @@ class Bullet:
         bullet_offset_2 = (4, 6)
         bullet_position_1 = [player_model.pos_x + bullet_offset_1[0], player_model.pos_y + bullet_offset_1[1]]
         bullet_position_2 = [player_model.pos_x + bullet_offset_2[0], player_model.pos_y + bullet_offset_2[1]]
-        new_bullet_1 = Bullet(bullet_position_1, bullet_speed , 0, 0)
-        new_bullet_2 = Bullet(bullet_position_2, bullet_speed, 0, 0)
+        new_bullet_1 = Bullet(bullet_position_1, bullet_speed , 0, 0, bullet_type='player')
+        new_bullet_2 = Bullet(bullet_position_2, bullet_speed, 0, 0, bullet_type='player')
         new_bullet_1.play_sound()
         new_bullet_2.play_sound()
         return [new_bullet_1, new_bullet_2]

@@ -217,7 +217,7 @@ while running:
     # code for enemies to shoot - Uses the angle to determine firing position then shoots along that delta. 
     for enemy in enemies:
         if enemy.shooter_tag is True and time_enemy_last_shot >= ENEMY_BULLET_CD:              
-            enemy_bullet = Bullet.Bullet((enemy.pos_x, enemy.pos_y), bullet_speed, player_model.pos_x, player_model.pos_y)
+            enemy_bullet = Bullet.Bullet((enemy.pos_x, enemy.pos_y), bullet_speed, player_model.pos_x, player_model.pos_y, bullet_type='enemy')
             enemy_bullets.append(enemy_bullet)    
             time_enemy_last_shot = 0
             
