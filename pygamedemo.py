@@ -342,7 +342,7 @@ while running:
     
     
     if player_model.lives <= 0:
-        level.EndScreen(player_model, lives_model, bullets, enemies, time_since_last_spawn, time_since_last_shot, HUD_model)
+        level.EndScreen(player_model, lives_model, bullets, enemies, enemy_bullets, time_since_last_spawn, time_since_last_shot, HUD_model)
         reset_music() #Ensure music is reset on game restart
         # Optionally break out of the loop after game over handling
         #running = False

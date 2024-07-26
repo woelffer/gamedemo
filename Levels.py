@@ -52,7 +52,7 @@ class Levels:
             self.clock.tick(60)
         
 
-    def EndScreen(self, player_model, lives_model, bullets, enemies, time_since_last_spawn, time_since_last_shot, hud):
+    def EndScreen(self, player_model, lives_model, bullets, enemies,enemy_bullets, time_since_last_spawn, time_since_last_shot, hud):
 
         #Load quotes from JSON file
         with open('assets/quotes.json') as f:
@@ -79,6 +79,7 @@ class Levels:
                         self.hud.reset()
                         print(f"Hud reset Score after:  {self.hud.score}")
                         bullets.clear()
+                        enemy_bullets.clear()
                         enemies.clear()
                         game_over = False
                         # Reset time variables
