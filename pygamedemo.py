@@ -250,6 +250,7 @@ while running:
         
         if enemy_bullet.rect().colliderect(player_model.rect()):
             enemy_bullets.remove(enemy_bullet)
+            player_model.take_dmg()
             print(enemy_bullets)
             break
 

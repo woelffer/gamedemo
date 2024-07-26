@@ -166,19 +166,6 @@ class Player:
         print(f"Animation Timer: {self.animation_timer}")
         print(f"Animation Duration: {self.animation_duration}")
         
-        if self.is_flashing:
-            self.flash_timer -= dt
-            if self.flash_timer <= 0:
-                self.is_flashing = False
-                self.player_img = self.original_img.copy()  # Restore original image
-            else:
-                # Apply flash effect by tinting the image
-                self.player_img = self.original_img.copy()
-                flash_surface = pygame.Surface(self.player_img.get_size()).convert_alpha()
-                flash_surface.fill(self.flash_color + (128,))  # Apply transparency to the tint
-                self.player_img.blit(flash_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-        
-
         # Handle animation
         if self.current_animation:
             self.animation_timer += dt
@@ -196,6 +183,21 @@ class Player:
                 self.animation_timer = 0  # Reset animation timer
         else:
             self.player_img = self.animations["default"][0]
+            
+        if self.is_flashing:
+            self.flash_timer -= dt
+            if self.flash_timer <= 0:
+                self.is_flashing = False
+                self.player_img = self.original_img.copy()  # Restore original image
+            else:
+                # Apply flash effect by tinting the image
+                self.player_img = self.original_img.copy()
+                flash_surface = pygame.Surface(self.player_img.get_size()).convert_alpha()
+                flash_surface.fill(self.flash_color + (128,))  # Apply transparency to the tint
+                self.player_img.blit(flash_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+        
+
+        
          
     
     def update_circle(self, dt):
