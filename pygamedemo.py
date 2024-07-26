@@ -67,7 +67,7 @@ enemy_bullets = []
 
 #Can ADJUST THIS WHEN WE Introduce levels and powerups
 BULLET_COOLDOWN = 0.05
-ENEMY_BULLET_CD = 0.2
+ENEMY_BULLET_CD = 0.4
 
 # Track the time since the last bullet was fired
 time_since_last_shot = 0
