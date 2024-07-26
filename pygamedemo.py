@@ -67,7 +67,7 @@ enemy_bullets = []
 
 #Can ADJUST THIS WHEN WE Introduce levels and powerups
 BULLET_COOLDOWN = 0.05
-ENEMY_BULLET_CD = 1
+ENEMY_BULLET_CD = 0.2
 
 # Track the time since the last bullet was fired
 time_since_last_shot = 0
@@ -218,7 +218,7 @@ while running:
     for enemy in enemies:
         if enemy.shooter_tag is True and time_enemy_last_shot >= ENEMY_BULLET_CD:              
             enemy_bullet = Bullet.Bullet((enemy.pos_x, enemy.pos_y), bullet_speed, player_model.pos_x, player_model.pos_y, bullet_type='enemy')
-            enemy_bullets.append(enemy_bullet)    
+            enemy_bullets.extend(enemy_bullet.create_enemy_bullets(enemy, bullet_speed, player_model.pos_x, player_model.pos_y))    
             time_enemy_last_shot = 0
             
 

@@ -43,8 +43,8 @@ class Bullet:
     def create_enemy_bullets(self, enemy_model, bullet_speed, targetx, targety):
         self.targetx = targetx
         self.targety = targety
-        bullet_offset_1 = (54, 6)
-        bullet_offset_2 = (4, 6)
+        bullet_offset_1 = (-14, 6)
+        bullet_offset_2 = (-54, 6)
         bullet_position_1 = [enemy_model.pos_x + bullet_offset_1[0], enemy_model.pos_y + bullet_offset_1[1]]
         bullet_position_2 = [enemy_model.pos_x + bullet_offset_2[0], enemy_model.pos_y + bullet_offset_2[1]]
         new_bullet_1 = Bullet(bullet_position_1, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
