@@ -2,11 +2,13 @@ import pygame
 import math 
 from pygame import mixer
 
+
 class Enemy:
     def __init__(self, posx, posy, shooter_tag):
         try:
             self.enemy_img = pygame.image.load("assets/Enemy_Spaceship.png").convert_alpha()
             self.dmg_img = pygame.image.load("assets/Inv_Spaceship.png").convert_alpha()
+            self.shooting_img = pygame.image.load("assets/Spaceship_Shooting.png").convert_alpha()
         except pygame.error as e:
             print(f"Error loading image: {e}")
             return
@@ -31,7 +33,12 @@ class Enemy:
         self.angle = 0 #Initial angle
         self.shooter_tag = shooter_tag # Flag to switch spawn types/ enemy AI
         
-
+    def get_display_image(self):
+        """Get the image to display, depending on whether the enemy is tagged for shooting."""
+        if self.shooter_tag:
+            return self.shooting_img
+        return self.original_enemy_img
+    
     def move_towards_player(self, player, dt):
         #Find direction vector (dx, dy) between enemy and player
         dx = player.pos_x - self.pos_x
@@ -83,7 +90,8 @@ class Enemy:
 
     def draw(self, screen):
         #Rotate the enmey image based on the angle
-        rotated_enemy_img = pygame.transform.rotate(self.original_enemy_img, -self.angle)
+        image_to_draw = self.get_display_image()
+        rotated_enemy_img = pygame.transform.rotate(image_to_draw, -self.angle)
         rotated_dmg_img = pygame.transform.rotate(self.original_dmg_img, -self.angle)
         rotated_rect = rotated_enemy_img.get_rect(center=(self.pos_x, self.pos_y))
         if self.damaged:
