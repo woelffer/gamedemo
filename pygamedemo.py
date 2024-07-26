@@ -67,11 +67,13 @@ stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_sta
 SPAWN_INTERVAL = 0.3 #Seconds between spawns
 time_since_last_spawn = 0
 
-#used for differeniating star images as they appear to share the same memory address so python can't interpret a new star image 
+#used for differeniating star images as they appear to share the same memory address so python can't interpret a new star image
+# Requires numpy package to work properly 
 def images_different(img1, img2):
     arr1 = pygame.surfarray.array3d(img1)
     arr2 = pygame.surfarray.array3d(img2)
     return not np.array_equal(arr1, arr2)
+
 
 
 def spawn_enemy():
