@@ -13,12 +13,29 @@ from pygame import mixer
 import numpy as np
 
 #Starting the mixer
-pygame.mixer.pre_init(44100, 16, 2, 4096)
-mixer.init()
-theme = mixer.Sound('audio/retro_song.mp3')
-channel = mixer.Channel(3)
-channel.play(theme, loops=-1) #Loop the music indefinitely
-channel.set_volume(0.1)
+pygame.mixer.pre_init(44100, -16, 2, 4096)
+pygame.mixer.init()
+
+#load music tracks 
+music_tracks = {
+    'theme': 'audio/retro_song.mp3',
+    'song_2': 'audio/Game_Temp.wav'
+    }
+
+#Function to play a specific track
+def play_music(track_name, loop = True):
+    if pygame.mixer.music.get_busy():
+        pygame.mixer.music.stop()
+    
+    pygame.mixer.music.load(music_tracks[track_name])
+    loop_count = -1 if loop else 0
+    pygame.mixer.music.play(loop_count)
+    pygame.mixer.music.set_volume(0.1)  # Adjust volume if needed
+
+current_track = 'theme'
+play_music(current_track)
+
+
 
 #Initialize pygame
 
@@ -82,10 +99,38 @@ def spawn_enemy():
      new_enemy = Enemy.Enemy(x_pos, y_pos)
      enemies.append(new_enemy)
 
+# Initialize score thresholds
+score_thresholds = {
+    5000: 'theme',
+    10000: 'song_2'
+}
+
+# Track the current song
+def update_music(score):
+    global current_track
+    new_track = None
+
+    if score >= 10000:
+        new_track = 'song_2'
+    elif score >= 5000:
+        new_track = 'theme'
+
+    if new_track and current_track != new_track:
+        current_track = new_track
+        play_music(current_track)
+
+
+def reset_music():
+    global current_track
+    current_track = 'theme'
+    play_music(current_track)
+
 level = Levels.Levels(stars, screen, screen_width, screen_height, title_screen_img, clock, HUD_model)
 level.TitleScreen()
 
 current_level_name = 'The Starstruck Plains'
+
+
 
 
 
@@ -98,7 +143,10 @@ while running:
 
     time_since_last_shot += dt  # Update the cooldown timer
     time_since_last_spawn += dt #Update spawn timer
+
     
+    update_music(HUD_model.score)
+
     # Check score and update star image if necessary
     if HUD_model.score >= 10000:
         new_star_img = pygame.image.load("assets/Star_3.png").convert_alpha()
@@ -109,6 +157,7 @@ while running:
     else:
         new_star_img = pygame.image.load("assets/Star.png").convert_alpha()
         new_level_name = 'The Starstruck Plains'
+    
     
     # Compare image content
     if images_different(star_img, new_star_img):
@@ -254,7 +303,7 @@ while running:
     
     if player_model.lives <= 0:
         level.EndScreen(player_model, lives_model, bullets, enemies, time_since_last_spawn, time_since_last_shot, HUD_model)
-        
+        reset_music() #Ensure music is reset on game restart
         # Optionally break out of the loop after game over handling
         #running = False
 

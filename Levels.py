@@ -84,7 +84,7 @@ class Levels:
                         # Reset time variables
                         self.time_since_last_spawn = 0
                         self.time_since_last_shot = 0
-
+                        #reset_music()
 
                         break
 
