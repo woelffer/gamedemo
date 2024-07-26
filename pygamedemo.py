@@ -10,6 +10,7 @@ import math
 import Levels
 import json
 from pygame import mixer
+import numpy as np
 
 #Starting the mixer
 pygame.mixer.pre_init(44100, 16, 2, 4096)
@@ -66,6 +67,13 @@ stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_sta
 SPAWN_INTERVAL = 0.3 #Seconds between spawns
 time_since_last_spawn = 0
 
+#used for differeniating star images as they appear to share the same memory address so python can't interpret a new star image 
+def images_different(img1, img2):
+    arr1 = pygame.surfarray.array3d(img1)
+    arr2 = pygame.surfarray.array3d(img2)
+    return not np.array_equal(arr1, arr2)
+
+
 def spawn_enemy():
      x_pos = random.randint(0, screen_width - 64) #Enemy width 64 pixels 
      y_pos = -64 #start offscreen
@@ -74,6 +82,8 @@ def spawn_enemy():
 
 level = Levels.Levels(stars, screen, screen_width, screen_height, title_screen_img, clock, HUD_model)
 level.TitleScreen()
+
+current_level_name = 'The Starstruck Plains'
 
 
 
@@ -86,6 +96,28 @@ while running:
 
     time_since_last_shot += dt  # Update the cooldown timer
     time_since_last_spawn += dt #Update spawn timer
+    
+    # Check score and update star image if necessary
+    if HUD_model.score >= 10000:
+        new_star_img = pygame.image.load("assets/Star_3.png").convert_alpha()
+        new_level_name = 'Corrupted Spaceport'
+    elif HUD_model.score >= 5000:
+        new_star_img = pygame.image.load("assets/Star_2.png").convert_alpha()
+        new_level_name = 'Spaces Between'
+    else:
+        new_star_img = pygame.image.load("assets/Star.png").convert_alpha()
+        new_level_name = 'The Starstruck Plains'
+    
+    # Compare image content
+    if images_different(star_img, new_star_img):
+        star_img = new_star_img
+        for star in stars:
+            star.star_img = star_img  # Update the star image attribute
+
+    # Update level name if it has changed
+    if new_level_name != current_level_name:
+        current_level_name = new_level_name
+        HUD_model.draw_levelName(screen, current_level_name)  # Update the level name
 
     #Clear Screen
     screen.fill((0,0,0))
@@ -123,6 +155,8 @@ while running:
 
    
     speed_factor = 1 + (HUD_model.score // 5000) * 0.5  # Increase speed by 50% for every 5000 points
+    
+
     for enemy in enemies:
         enemy.increase_speed(speed_factor)
 
@@ -213,7 +247,7 @@ while running:
 
     #draw the score and level name from HUD class
     screen.blit(HUD_model.draw_score(screen), HUD_model.score_rect_pos)
-    screen.blit(HUD_model.draw_levelName(screen, 'The Starstruck Plains'), HUD_model.levelName_rect)
+    screen.blit(HUD_model.draw_levelName(screen, current_level_name), HUD_model.levelName_rect)
     
     
     if player_model.lives <= 0:
