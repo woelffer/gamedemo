@@ -49,8 +49,8 @@ class Bullet:
         bullet_position_2 = [enemy_model.pos_x + bullet_offset_2[0], enemy_model.pos_y + bullet_offset_2[1]]
         new_bullet_1 = Bullet(bullet_position_1, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
         new_bullet_2 = Bullet(bullet_position_2, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
-        new_bullet_1.play_sound()
-        new_bullet_2.play_sound()
+       # new_bullet_1.play_sound()
+        #new_bullet_2.play_sound()
         return [new_bullet_1, new_bullet_2]
 
 
