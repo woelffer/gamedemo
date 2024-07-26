@@ -210,6 +210,7 @@ while running:
     # List to keep track of enemies to be removed
     enemies_to_remove = set()
     bullets_to_remove = set()
+    enemy_bullets_to_remove = set()
     
 
     speed_factor = 1 + (HUD_model.score // 5000) * 0.5  # Increase speed by 50% for every 5000 points
@@ -244,12 +245,12 @@ while running:
     # Check for enemy bullet out of bounds and enemy bullet collide with player model
     for enemy_bullet in enemy_bullets:
         print("This is a enemy bullet address:", enemy_bullet)
-        if not enemy_bullet.rect() in screen.get_rect():
-            enemy_bullets.remove(enemy_bullet)
+        if not enemy_bullet.rect().colliderect(screen.get_rect()):
+            enemy_bullets_to_remove.add(enemy_bullet)
             print(enemy_bullets)
         
         if enemy_bullet.rect().colliderect(player_model.rect()):
-            enemy_bullets.remove(enemy_bullet)
+            enemy_bullets_to_remove.add(enemy_bullet)
             player_model.take_dmg()
             print(enemy_bullets)
             break
@@ -313,6 +314,11 @@ while running:
     for bullet in bullets_to_remove: 
         if bullet in bullets:             
             bullets.remove(bullet)
+    
+    # Remove enemy bullets
+    for enemy_bullet in enemy_bullets_to_remove:
+        if enemy_bullet in enemy_bullets:
+            enemy_bullets.remove(enemy_bullet)
  
     for bullet in bullets:
         bullet.move(dt)
