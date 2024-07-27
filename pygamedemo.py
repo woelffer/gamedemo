@@ -30,7 +30,7 @@ def play_music(track_name, loop = True):
     pygame.mixer.music.load(music_tracks[track_name])
     loop_count = -1 if loop else 0
     pygame.mixer.music.play(loop_count)
-    pygame.mixer.music.set_volume(0.2)  # Adjust volume if needed
+    pygame.mixer.music.set_volume(0.1)  # Adjust volume if needed
 
 current_track = 'theme'
 play_music(current_track)
@@ -325,6 +325,7 @@ while running:
         screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))
     
     for enemy_bullet in enemy_bullets:
+        enemy_bullet.draw_collision_box(screen)
         enemy_bullet.enemy_bullet_move(dt)
         screen.blit(enemy_bullet.bullet_img, (enemy_bullet.pos_x, enemy_bullet.pos_y))
         

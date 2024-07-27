@@ -30,7 +30,9 @@ class Bullet:
         self.pos_x = self.pos_x + int(self.dx) * dt
         self.pos_y = self.pos_y + int(self.dy) * dt
       
-        
+    def draw_collision_box(self, screen):
+        rect = self.rect()
+        pygame.draw.rect(screen, (255, 0, 0), rect, 2) 
 
     def rect(self):
         return self.bullet_img.get_rect(center =(self.pos_x, self.pos_y))
