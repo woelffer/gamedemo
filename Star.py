@@ -16,7 +16,7 @@ class Star:
         self.set_random_opacity()
     
     def set_random_opacity(self):
-        self.opacity = random.randint(10, 100) #Random opacity between 50 and 200
+        self.opacity = random.randint(20, 120) #Random opacity between 50 and 200
 
     def move(self, dt):
         self.pos_y += self.speed * dt

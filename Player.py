@@ -183,7 +183,6 @@ class Player:
                 self.animation_timer = 0  # Reset animation timer
         else:
             self.player_img = self.animations["default"][0]
-            
         if self.is_flashing:
             self.flash_timer -= dt
             if self.flash_timer <= 0:
