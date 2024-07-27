@@ -83,7 +83,7 @@ num_stars = 100
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
 #Variables for spawning enemies
-SPAWN_INTERVAL = 0.3 #Seconds between spawns
+SPAWN_INTERVAL = 0.8 #Seconds between spawns
 time_since_last_spawn = 0
 #seed = random.seed(10)
 #used for differeniating star images as they appear to share the same memory address so python can't interpret a new star image
@@ -291,7 +291,7 @@ while running:
 
     #Draw player and the line
     player_model.draw(screen)
-
+    player_model.draw_hitbox(screen)
     player_model.update_circle(dt)
     player_model.draw_circle(screen)
 
@@ -338,7 +338,7 @@ while running:
             enemy.move_towards_player(player_model, dt)
         enemy.update()
         enemy.draw(screen)
-        #enemy.draw_collision_rect(screen)
+        enemy.draw_collision_rect(screen)
           
     player_model.update(dt)
     

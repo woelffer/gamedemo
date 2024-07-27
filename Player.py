@@ -237,6 +237,11 @@ class Player:
         if self.line_start_pos and self.line_end_pos:
             pygame.draw.line(screen, self.line_color, self.line_start_pos, self.line_end_pos, 2)
             self.draw_parallel_lines(screen, self.line_start_pos, self.line_end_pos, 5)  # 5 pixels offset for parallel lines
+    
+
+    def draw_hitbox(self, screen):
+        rect = self.rect()
+        pygame.draw.rect(screen, (255, 0, 0), rect, 2)  # Red color, 2 pixels thick
 
     def draw_parallel_lines(self, screen, start_pos, end_pos, offset):
         # Calculate the direction of the primary line
