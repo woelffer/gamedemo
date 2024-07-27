@@ -8,6 +8,7 @@ class Bullet:
             self.bullet_img = pygame.image.load("assets/Bullet.png").convert_alpha()
         else:
             self.bullet_img = pygame.image.load("assets/Bullet_E.png").convert_alpha()
+            
         print(f"Loaded image for bullet type '{bullet_type}': {self.bullet_img}")
         self.bullet_sound = mixer.Sound("audio/8-bit-machine-gun.aiff")
         self.bullet_sound.set_volume(0.1)
@@ -19,6 +20,7 @@ class Bullet:
         self.dx = math.cos(self.angle) * self.speed
         self.dy = math.sin(self.angle) * self.speed
         print("Angle in degreese: ", int(self.angle*180/math.pi))
+        self.scaled_enemy_bullet = pygame.transform.scale(self.bullet_img, (7,7))
 
 
     
@@ -35,7 +37,7 @@ class Bullet:
         pygame.draw.rect(screen, (255, 0, 0), rect, 2) 
 
     def rect(self):
-        return self.bullet_img.get_rect(center =(self.pos_x, self.pos_y))
+        return self.scaled_enemy_bullet.get_rect(center =(self.pos_x, self.pos_y))
 
     def play_sound(self):
         channel = pygame.mixer.Channel(2)
@@ -45,13 +47,13 @@ class Bullet:
     def create_enemy_bullets(self, enemy_model, bullet_speed, targetx, targety):
         self.targetx = targetx
         self.targety = targety
-        bullet_offset_1 = (-14, 6)
-        bullet_offset_2 = (-54, 6)
+        bullet_offset_1 = (-26, 12)
+        bullet_offset_2 = (24, 12)
         bullet_position_1 = [enemy_model.pos_x + bullet_offset_1[0], enemy_model.pos_y + bullet_offset_1[1]]
         bullet_position_2 = [enemy_model.pos_x + bullet_offset_2[0], enemy_model.pos_y + bullet_offset_2[1]]
         new_bullet_1 = Bullet(bullet_position_1, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
         new_bullet_2 = Bullet(bullet_position_2, bullet_speed, self.targetx, self.targety, bullet_type='enemy')
-       # new_bullet_1.play_sound()
+        #new_bullet_1.play_sound()
         #new_bullet_2.play_sound()
         return [new_bullet_1, new_bullet_2]
 

@@ -32,6 +32,9 @@ class Enemy:
         self.sound_played = False #Flag to track if the sound has been played
         self.angle = 0 #Initial angle
         self.shooter_tag = shooter_tag # Flag to switch spawn types/ enemy AI
+        self.time_last_shot = 0
+        self.bullet_cooldown = 0.5
+        self.shootReady = False
         
     def get_display_image(self):
         """Get the image to display, depending on whether the enemy is tagged for shooting."""
@@ -120,9 +123,18 @@ class Enemy:
         self.damaged_time = pygame.time.get_ticks() # Get current time
 
     def update(self):
+
         #Check if the damged stae should be reset
         if self.damaged and pygame.time.get_ticks() - self.damaged_time > 300: #500 ms
             self.damaged = False
+
+
+    def ready_to_shoot(self):
+        if self.time_last_shot >= self.bullet_cooldown:
+            self.time_last_shot = 0
+            return True
+        if self.time_last_shot <= self.bullet_cooldown:
+            return False
     
     def is_alive(self):
         return self.health > 0

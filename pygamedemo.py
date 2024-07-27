@@ -217,10 +217,15 @@ while running:
     
     # code for enemies to shoot - Uses the angle to determine firing position then shoots along that delta. 
     for enemy in enemies:
-        if enemy.shooter_tag is True and time_enemy_last_shot >= ENEMY_BULLET_CD:              
-            enemy_bullet = Bullet.Bullet((enemy.pos_x, enemy.pos_y), bullet_speed, player_model.pos_x, player_model.pos_y, bullet_type='enemy')
-            enemy_bullets.extend(enemy_bullet.create_enemy_bullets(enemy, bullet_speed, player_model.pos_x, player_model.pos_y))    
-            time_enemy_last_shot = 0
+        if enemy.shooter_tag is True:
+            result = enemy.ready_to_shoot()
+            if result:
+                enemy_bullet = Bullet.Bullet((enemy.pos_x, enemy.pos_y), bullet_speed, player_model.pos_x, player_model.pos_y, bullet_type='enemy')
+                enemy_bullets.extend(enemy_bullet.create_enemy_bullets(enemy, bullet_speed, player_model.pos_x, player_model.pos_y))
+            else:
+                enemy.time_last_shot += dt
+            
+        
             
 
 
@@ -325,9 +330,10 @@ while running:
         screen.blit(bullet.bullet_img, (bullet.pos_x, bullet.pos_y))
     
     for enemy_bullet in enemy_bullets:
-        enemy_bullet.draw_collision_box(screen)
         enemy_bullet.enemy_bullet_move(dt)
+        enemy_bullet.draw_collision_box(screen)
         screen.blit(enemy_bullet.bullet_img, (enemy_bullet.pos_x, enemy_bullet.pos_y))
+        
         
 
     # Move and update enemies/lives/bullets/scoreds
@@ -335,7 +341,7 @@ while running:
         print(enemy.shooter_tag)
         if enemy.shooter_tag == True:
             enemy.move_to_shoot(player_model, dt)
-        elif enemy.shooter_tag == False:
+        if enemy.shooter_tag == False:
             enemy.move_towards_player(player_model, dt)
         enemy.update()
         enemy.draw(screen)
