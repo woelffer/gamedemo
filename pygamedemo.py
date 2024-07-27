@@ -274,6 +274,22 @@ while running:
     
     #Check for circle collisions with enemies
     if player_model.circle_active:
+        # Approximate the player's circle with a rectangle
+        circle_rect = pygame.Rect(
+        player_model.pos_x - player_model.circle_radius,
+        player_model.pos_y - player_model.circle_radius,
+        2 * player_model.circle_radius,
+        2 * player_model.circle_radius
+        ) 
+        for enemy_bullet in enemy_bullets:
+        # Create a rectangle for the enemy bullet
+            bullet_rect = enemy_bullet.rect()  # Assumes rect() returns a pygame.Rect object
+
+            # Check if the bullet rectangle collides with the player's circle rectangle
+            if circle_rect.colliderect(bullet_rect):
+                # Handle collision: remove bullet and apply damage to the player
+                enemy_bullets_to_remove.add(enemy_bullet)    
+
         circle_center = (player_model.pos_x + player_model.player_img.get_width() // 2, player_model.pos_y + player_model.player_img.get_height() // 2)
         for enemy in enemies:
             enemy_center = (enemy.pos_x + enemy.enemy_img.get_width() // 2, enemy.pos_y + enemy.enemy_img.get_height() // 2)
