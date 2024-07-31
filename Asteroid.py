@@ -17,7 +17,7 @@ class Asteroid:
         self.frame_counter = 0
 
         # Initialize rect to match the visible portion of the sprite
-        self.rect = self.roll_frames[0].get_rect(topleft=position)
+        self.rect = self.roll_frames[0].get_bounding_rect()
 
     def load_frames(self, json_path):
         with open(json_path) as f:
@@ -29,7 +29,7 @@ class Asteroid:
             frame_surface = self.sprite_sheet.subsurface(pygame.Rect(x, y, w, h))
             self.roll_frames.append(frame_surface)
         # Update rect size to match the first frame
-        self.rect = self.roll_frames[0].get_rect()
+        self.rect = self.roll_frames[0].get_bounding_rect()
 
     def update(self, dt):
         #Update animation
@@ -48,7 +48,20 @@ class Asteroid:
             self.pos_x += self.speed * dt
             self.pos_y += self.speed * dt
         
-        self.rect.topleft = (self.pos_x, self.pos_y)
+    # Get the current frame's bounding rectangle
+        current_frame = self.roll_frames[self.frame_index]
+        bounding_rect = current_frame.get_bounding_rect()
+
+        # Calculate the offset caused by the bounding rectangle not starting at (0, 0)
+        offset_x = bounding_rect.x
+        offset_y = bounding_rect.y
+
+        # Update the position of the rect to match the sprite's position plus offset
+        self.rect = pygame.Rect(
+            self.pos_x + offset_x, 
+            self.pos_y + offset_y, 
+            bounding_rect.width, 
+            bounding_rect.height)
 
 
     def draw(self, screen):
