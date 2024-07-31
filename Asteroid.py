@@ -67,4 +67,4 @@ class Asteroid:
     def draw(self, screen):
         screen.blit(self.roll_frames[self.frame_index], (self.pos_x, self.pos_y))
 
-        pygame.draw.rect(screen, (255, 0, 0, 127), self.rect, 2)
+       #pygame.draw.rect(screen, (255, 0, 0, 127), self.rect, 2)

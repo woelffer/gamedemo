@@ -336,7 +336,7 @@ while running:
        
        # Draw the collision rectangle for debugging
         collision_rect = asteroid.rect  # Direct attribute access
-        pygame.draw.rect(screen, (255, 0, 0), collision_rect, 2)  # Red rectangle with thickness of 2 pixels
+        #pygame.draw.rect(screen, (255, 0, 0), collision_rect, 2)  # Red rectangle with thickness of 2 pixels
         
         # Check if asteroid is within screen bounds
         if asteroid.rect.colliderect(screen.get_rect()):
