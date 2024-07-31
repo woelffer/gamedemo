@@ -52,7 +52,7 @@ class Levels:
             self.clock.tick(60)
         
 
-    def EndScreen(self, player_model, lives_model, bullets, enemies,enemy_bullets, time_since_last_spawn, time_since_last_shot, hud):
+    def EndScreen(self, player_model, lives_model, bullets, enemies,enemy_bullets, time_since_last_spawn, time_since_last_shot, hud, asteroids):
 
         #Load quotes from JSON file
         with open('assets/quotes.json') as f:
@@ -81,6 +81,7 @@ class Levels:
                         bullets.clear()
                         enemy_bullets.clear()
                         enemies.clear()
+                        asteroids.clear()
                         game_over = False
                         # Reset time variables
                         self.time_since_last_spawn = 0

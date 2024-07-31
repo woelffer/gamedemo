@@ -8,6 +8,7 @@ import HUD
 import random
 import math
 import Levels
+import Asteroid
 import json
 from pygame import mixer
 import numpy as np
@@ -58,7 +59,19 @@ player_model = Player.Player()
 enemies = [Enemy.Enemy(0, 0, False), Enemy.Enemy(400, 0, False), Enemy.Enemy(600, 0, False)]  # List of enemies
 lives_model = Lives.Lives()
 
-
+#Initialize Asteroid
+#asteroid = Asteroid.Asteroid((100,100), 'assets/Asteroid.json', 'assets/Asteroid.png')
+FRAME_WIDTH = 192
+FRAME_HEIGHT = 192
+def spawn_asteroid():
+    random_x = random.randint(0, screen_width - FRAME_WIDTH)
+    asteroid = Asteroid.Asteroid((random_x, -FRAME_HEIGHT), 'assets/Asteroid.json', 'assets/Asteroid.png')
+    return asteroid
+asteroid = spawn_asteroid()
+asteroids = []
+ASTEROID_SPAWN_INTERVAL = 1.0  # Adjust as needed
+time_since_last_asteroid_spawn = 0
+asteroids_to_remove = []
 
 #Bullet initialize
 bullet_speed = -500
@@ -83,7 +96,7 @@ num_stars = 100
 stars = [Star.Star(star_img, screen_width, screen_height) for _ in range(num_stars)]
 
 #Variables for spawning enemies
-SPAWN_INTERVAL = 0.8 #Seconds between spawns
+SPAWN_INTERVAL = 0.6 #Seconds between spawns
 time_since_last_spawn = 0
 #seed = random.seed(10)
 #used for differeniating star images as they appear to share the same memory address so python can't interpret a new star image
@@ -137,6 +150,7 @@ level = Levels.Levels(stars, screen, screen_width, screen_height, title_screen_i
 level.TitleScreen()
 
 current_level_name = 'The Starstruck Plains'
+
 
 
 
@@ -307,7 +321,42 @@ while running:
     #Player update/draw calls
 
     #update the player's state and animations
+    #Spawn asteroids at intervals
+    # Spawn asteroids
+    COLLISION_START_Y = 50 
+    time_since_last_asteroid_spawn += dt
+    if time_since_last_asteroid_spawn >= ASTEROID_SPAWN_INTERVAL:
+        asteroids.append(spawn_asteroid())
+        time_since_last_asteroid_spawn = 0
 
+    for asteroid in asteroids:
+        asteroid.update(dt)
+
+        asteroid.draw(screen)
+       
+       # Draw the collision rectangle for debugging
+        collision_rect = asteroid.rect  # Direct attribute access
+        pygame.draw.rect(screen, (255, 0, 0), collision_rect, 2)  # Red rectangle with thickness of 2 pixels
+        
+        # Check if asteroid is within screen bounds
+        if asteroid.rect.colliderect(screen.get_rect()):
+            # Check if the asteroid has moved below the threshold
+            if asteroid.pos_y > COLLISION_START_Y:
+                for enemy in enemies:
+                    # Ensure both asteroid and enemy are on screen before checking collision
+                    if enemy.rect().colliderect(screen.get_rect()) and asteroid.rect.colliderect(enemy.rect()):
+                        enemies_to_remove.add(enemy)
+                        break  # Stop checking other enemies
+    # Check if offscreen
+    if asteroid.pos_y > screen_height:
+        asteroids_to_remove.append(asteroid)
+
+    # Remove marked asteroids and enemies
+    for asteroid in asteroids_to_remove:
+        if asteroid in asteroids:
+            asteroids.remove(asteroid)
+ 
+    
     player_model.update_position(dt)
 
     #Draw player and the line
@@ -372,7 +421,7 @@ while running:
     
     
     if player_model.lives <= 0:
-        level.EndScreen(player_model, lives_model, bullets, enemies, enemy_bullets, time_since_last_spawn, time_since_last_shot, HUD_model)
+        level.EndScreen(player_model, lives_model, bullets, enemies, enemy_bullets, time_since_last_spawn, time_since_last_shot, HUD_model, asteroids)
         reset_music() #Ensure music is reset on game restart
         # Optionally break out of the loop after game over handling
         #running = False
