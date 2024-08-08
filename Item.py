@@ -15,6 +15,7 @@ class Item():
         self.frame_counter = 0
         self.rect = pygame.Rect(self.x, self.y, FRAME_WIDTH, FRAME_HEIGHT)
         self.speed = random.randint(100, 200)
+        self.rotation_angle = 0
 
     def load_frames(self, path):
         with open(path) as f:
@@ -37,11 +38,20 @@ class Item():
             self.frame_index = (self.frame_index + 1) % len(self.hover_frames)
         
         self.y += self.speed * dt
+        
+        self.rotation_angle += 90 * dt  # Rotate 90 degrees per second
+        if self.rotation_angle >= 360:
+            self.rotation_angle = 0
 
         #Get the current frame's bounding rect 
         current_frame = self.hover_frames[self.frame_index]
         self.rect = pygame.Rect(self.x, self.y, current_frame.get_width(), current_frame.get_height())
         
     def draw(self, screen):
-        screen.blit(self.hover_frames[self.frame_index], (self.x, self.y))
-        pygame.draw.rect(screen, (255,0,0,127), self.rect, 2) #Draws the item collision box for troubleshooting
+        #screen.blit(self.hover_frames[self.frame_index], (self.x, self.y))
+        #pygame.draw.rect(screen, (255,0,0,127), self.rect, 2) #Draws the item collision box for troubleshooting
+        current_frame = self.hover_frames[self.frame_index]
+        rotated_frame = pygame.transform.rotate(current_frame, self.rotation_angle)
+        new_rect = rotated_frame.get_rect(center=current_frame.get_rect(topleft=(self.x, self.y)).center)
+        pygame.draw.rect(screen, (255,0,0,127), self.rect, 2)
+        screen.blit(rotated_frame, new_rect.topleft)
