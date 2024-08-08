@@ -10,6 +10,7 @@ import math
 import Levels
 import Asteroid
 import json
+import Item
 from pygame import mixer
 import numpy as np
 
@@ -72,6 +73,19 @@ asteroids = []
 ASTEROID_SPAWN_INTERVAL = 1.0  # Adjust as needed
 time_since_last_asteroid_spawn = 0
 asteroids_to_remove = []
+
+#Initialize Health Item
+FRAME_WIDTHi = 59
+FRAME_HEIGHTi = 47
+def spawn_health():
+    random_x = random.randint(0, screen_width - FRAME_WIDTHi)
+    health = Item.Item((random_x, -FRAME_HEIGHTi), 'assets/health_item.json', 'assets/health_item.png')
+    return health
+health = spawn_health()
+healths = []
+HEALTH_SPAWN_INTERVAL = 4.0
+time_since_last_health_spawn = 0
+health_to_remove = []
 
 #Bullet initialize
 bullet_speed = -500
@@ -356,6 +370,32 @@ while running:
         if asteroid in asteroids:
             asteroids.remove(asteroid)
  
+    #Spawn Health
+    time_since_last_health_spawn += dt
+    if time_since_last_health_spawn >= HEALTH_SPAWN_INTERVAL:
+        new_health = spawn_health()
+        print(f"Spawning health item at position: {new_health.x}, {new_health.y}")
+        healths.append(new_health)
+        time_since_last_health_spawn = 0
+    
+    for health in healths:
+        health.update(dt)
+        health.draw(screen)
+        print(f"Drawing health item at position: {health.x}, {health.y}")
+        if health.rect.colliderect(player_model.rect()):
+            health_to_remove.append(health)
+
+
+    
+    
+    # Check if health items go off screen
+    for health in healths:
+        if health.y > screen_height:
+            health_to_remove.append(health)
+
+    for health in health_to_remove:
+        if health in healths:
+            healths.remove(health)
     
     player_model.update_position(dt)
 
