@@ -384,6 +384,7 @@ while running:
         print(f"Drawing health item at position: {health.x}, {health.y}")
         if health.rect.colliderect(player_model.rect()):
             health_to_remove.append(health)
+            player_model.lives += 1
 
 
     

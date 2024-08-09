@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\assets",
+    "\\audio"
   ],
-  "SelectedNode": "\\Enemy.py",
+  "SelectedNode": "\\assets\\Missile.png",
   "PreviewInSolutionExplorer": false
 }
